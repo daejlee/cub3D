@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daejlee <daejlee@student.42.kr>            +#+  +:+       +#+         #
+#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/01/27 15:51:49 by daejlee          ###   ########.fr        #
+#    Updated: 2023/01/27 20:33:45 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		= cub3D
-CFLAGS 		= -Wall -Wextra -Werror
+CFLAGS 		= -g -Wall -Wextra -Werror
 CC 			= cc
 SRC 		= main.c
 OBJ 		= $(SRC:.c=.o)
@@ -21,7 +21,7 @@ MLX_DIR		= ./minilibx_mms_20200219/
 MLX_FLAGS	=  -framework OpenGL -framework Appkit
 
 INCLUDE = -I./include -I$(MLX_DIR)
-LIBRARY = -L$(LIBFT_DIR) -lft ./libmlx.dylib
+LIBRARY = -L$(LIBFT_DIR) -lft -lmlx
 
 all : $(NAME)
 

@@ -17,18 +17,24 @@
 # define ON_KEYDOWN_EVENT 2
 # define ON_DESTROY_EVENT 17
 
-typedef struct s_info 
+typedef struct s_mlx
 {
-	void	*mlx;
-	void	*mlx_win;
+	void	*ptr;
+	void	*win_ptr;
+}	t_mlx;
 
-	double	posX;
-	double	posY;
-	double	dirX;
-	double	dirY;
-	double	planeX;
-	double	planeY;
-	double	old_time;
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}	t_vector;
+typedef struct s_info
+{
+	t_mlx		mlx;
+	t_vector	pos;
+	t_vector	dir;
+	t_vector	plane;
+	double		old_time;
 }	t_info;
 
 char worldMap[MAP_WIDTH][MAP_HEIGHT]=
@@ -77,11 +83,11 @@ int	draw_map(t_info *info)
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
 		double	cameraX = 2 * i / (double)SCREEN_WIDTH - 1;
-		double	rayDirX = info->dirX + info->planeX * cameraX;
-		double	rayDirY = info->dirY + info->planeY * cameraX;
+		double	rayDirX = info->dir.x + info->plane.x * cameraX;
+		double	rayDirY = info->dir.y + info->plane.y * cameraX;
 
-		int mapX = (int)info->posX;
-		int	mapY = (int)info->posY;
+		int mapX = (int)info->pos.x;
+		int	mapY = (int)info->pos.y;
 
 		double	sideDistX;
 		double	sideDistY;
@@ -100,22 +106,22 @@ int	draw_map(t_info *info)
 		if(rayDirX < 0)
     	{
         	stepX = -1;
-        	sideDistX = (info->posX - mapX) * deltaDistX;
+        	sideDistX = (info->pos.x - mapX) * deltaDistX;
     	}
     	else
     	{
     		stepX = 1;
-    		sideDistX = (mapX + 1.0 - info->posX) * deltaDistX;
+    		sideDistX = (mapX + 1.0 - info->pos.x) * deltaDistX;
     	}
     	if(rayDirY < 0)
     	{
         	stepY = -1;
-        	sideDistY = (info->posY - mapY) * deltaDistY;
+        	sideDistY = (info->pos.y - mapY) * deltaDistY;
     	}
     	else
     	{
         	stepY = 1;
-        	sideDistY = (mapY + 1.0 - info->posY) * deltaDistY;
+        	sideDistY = (mapY + 1.0 - info->pos.y) * deltaDistY;
     	}
 
 		//perform DDA
@@ -153,7 +159,7 @@ int	draw_map(t_info *info)
 		else
 			color = 0x000000FF;
 		for (int pixel = drawStart; pixel <= drawEnd; pixel++)
-			mlx_pixel_put(info->mlx, info->mlx_win, i, pixel, color);
+			mlx_pixel_put(info->mlx.ptr, info->mlx.win_ptr, i, pixel, color);
 	}
 	return (0);
 }
@@ -166,22 +172,22 @@ int	main()
 
 	info = (t_info *)malloc(sizeof(t_info));
 	/* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
-	info->posX = 12.5;
-	info->posY = 12.5;
+	info->pos.x = 12.5;
+	info->pos.y = 12.5;
 	/* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
-	info->dirX = -1;
-	info->dirY = 0;
+	info->dir.x = -1;
+	info->dir.y = 0;
 	/* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
-	info->planeX = 0;
-	info->planeY = 0.66;
+	info->plane.x = 0;
+	info->plane.y = 0.66;
 	/* time of previous frame */
 	info->old_time = 0;
 
 	/* mlx 초기화 및 hook */
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
-	info->mlx = mlx;
-	info->mlx_win = mlx_win;
+	info->mlx.ptr = mlx;
+	info->mlx.win_ptr = mlx_win;
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, NULL);
 	mlx_loop_hook(mlx, draw_map, info);

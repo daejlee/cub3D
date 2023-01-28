@@ -72,18 +72,6 @@ int	on_keydown(int keycode)
 	return (0);
 }
 
-int	draw_map_test(t_info *info)
-{
-	(void)info;
-
-	for (int i = 0; i < SCREEN_WIDTH; i++)
-	{
-		for (int j = 0; j < SCREEN_HEIGHT; j++)
-			mlx_pixel_put(info->mlx, info->mlx_win, i, j, 0x0000FF00);
-	}
-	return (0);
-}
-
 int	draw_map(t_info *info)
 {
 	for (int i = 0; i < SCREEN_WIDTH; i++)
@@ -147,7 +135,7 @@ int	draw_map(t_info *info)
     			side = 1;
 			}
     		//Check if ray has hit a wall
-			if(worldMap[mapX][mapY] > 0) hit = 1;
+			if(worldMap[mapX][mapY] > '0') hit = 1;
 		}
 
 		if(side == 0) perpWallDist = (sideDistX - deltaDistX);
@@ -159,8 +147,13 @@ int	draw_map(t_info *info)
     	if(drawStart < 0) drawStart = 0;
     	int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
     	if(drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
+		int	color;
+		if (side == 0)
+			color = 0x0000FF00;
+		else
+			color = 0x000000FF;
 		for (int pixel = drawStart; pixel <= drawEnd; pixel++)
-			mlx_pixel_put(info->mlx, info->mlx_win, i, pixel, 0x0000FF00);
+			mlx_pixel_put(info->mlx, info->mlx_win, i, pixel, color);
 	}
 	return (0);
 }
@@ -174,7 +167,7 @@ int	main()
 	info = (t_info *)malloc(sizeof(t_info));
 	/* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
 	info->posX = 12.5;
-	info->posX = 12.5;
+	info->posY = 12.5;
 	/* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
 	info->dirX = -1;
 	info->dirY = 0;

@@ -23,17 +23,24 @@ typedef struct s_mlx
 	void	*win_ptr;
 }	t_mlx;
 
-typedef struct s_vector
+typedef struct s_dvector
 {
 	double	x;
 	double	y;
-}	t_vector;
+}	t_dvector;
+
+typedef struct s_ivector
+{
+	int	x;
+	int	y;
+}	t_ivector;
+
 typedef struct s_info
 {
 	t_mlx		mlx;
-	t_vector	pos;
-	t_vector	dir;
-	t_vector	plane;
+	t_dvector	pos;
+	t_dvector	dir;
+	t_dvector	plane;
 	double		old_time;
 }	t_info;
 
@@ -82,70 +89,69 @@ int	draw_map(t_info *info)
 {
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
-		double	cameraX = 2 * i / (double)SCREEN_WIDTH - 1;
-		double	rayDirX = info->dir.x + info->plane.x * cameraX;
-		double	rayDirY = info->dir.y + info->plane.y * cameraX;
+		t_dvector	ray;
+		t_dvector	side_dist;
+		t_dvector	delta_dist;
+		t_ivector	map;
+		t_ivector	step;
+		double		perpWallDist;
+		double		screen_x;
+		int			hit = 0;
+		int			side;
+		
+		screen_x = 2 * i / (double)SCREEN_WIDTH - 1;
+		ray.x = info->dir.x + info->plane.x * screen_x;
+		ray.y = info->dir.y + info->plane.y * screen_x;
 
-		int mapX = (int)info->pos.x;
-		int	mapY = (int)info->pos.y;
+		map.x = (int)info->pos.x;
+		map.y = (int)info->pos.y;
 
-		double	sideDistX;
-		double	sideDistY;
+		delta_dist.x = (ray.x == 0) ? 1e30 : fabs(1 / ray.x);
+    	delta_dist.y = (ray.y == 0) ? 1e30 : fabs(1 / ray.y);
 
-		double	deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-    	double	deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-
-		double	perpWallDist;
-
-		int	stepX;
-		int	stepY;
-
-		int	hit = 0;
-		int	side;
-
-		if(rayDirX < 0)
+		if (ray.x < 0)
     	{
-        	stepX = -1;
-        	sideDistX = (info->pos.x - mapX) * deltaDistX;
+        	step.x = -1;
+        	side_dist.x = (info->pos.x - map.x) * delta_dist.x;
     	}
     	else
     	{
-    		stepX = 1;
-    		sideDistX = (mapX + 1.0 - info->pos.x) * deltaDistX;
+    		step.x = 1;
+    		side_dist.x = (map.x + 1.0 - info->pos.x) * delta_dist.x;
     	}
-    	if(rayDirY < 0)
+    	if (ray.y < 0)
     	{
-        	stepY = -1;
-        	sideDistY = (info->pos.y - mapY) * deltaDistY;
+        	step.y = -1;
+        	side_dist.y = (info->pos.y - map.y) * delta_dist.y;
     	}
     	else
     	{
-        	stepY = 1;
-        	sideDistY = (mapY + 1.0 - info->pos.y) * deltaDistY;
+        	step.y = 1;
+        	side_dist.y = (map.y + 1.0 - info->pos.y) * delta_dist.y;
     	}
 
 		//perform DDA
-    	while(hit == 0)
+    	while (hit == 0)
     	{
         	//jump to next map square, either in x-direction, or in y-direction
-        	if(sideDistX < sideDistY)
+        	if(side_dist.x < side_dist.y)
         	{
-        		sideDistX += deltaDistX;
-        		mapX += stepX;
+        		side_dist.x += delta_dist.x;
+        		map.x += step.x;
         		side = 0;
     		}
      	   else
     		{
-    			sideDistY += deltaDistY;
-        		mapY += stepY;
+    			side_dist.y += delta_dist.y;
+        		map.y += step.y;
     			side = 1;
 			}
     		//Check if ray has hit a wall
-			if(worldMap[mapX][mapY] > '0') hit = 1;
+			if(worldMap[map.x][map.y] > '0') hit = 1;
 		}
 
-		if(side == 0) perpWallDist = (sideDistX - deltaDistX);
-    	else          perpWallDist = (sideDistY - deltaDistY);
+		if (side == 0) perpWallDist = (side_dist.x - delta_dist.x);
+    	else          perpWallDist = (side_dist.y - delta_dist.y);
 
     	int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
 

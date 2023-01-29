@@ -23,6 +23,15 @@ typedef struct s_mlx
 	void	*win_ptr;
 }	t_mlx;
 
+typedef struct s_img
+{
+	void	*ptr;
+	char	*data;
+	int		bpp;
+	int		line_size;
+	int		endian;
+}	t_img;
+
 typedef struct s_dvector
 {
 	double	x;
@@ -41,6 +50,7 @@ typedef struct s_info
 	t_dvector	pos;
 	t_dvector	dir;
 	t_dvector	plane;
+	t_img		screen;
 	double		old_time;
 }	t_info;
 
@@ -84,6 +94,25 @@ int	on_keydown(int keycode)
 		exit(0);
 	return (0);
 }
+
+// void	draw_line(int height)
+// {
+// 	int	start;
+// 	int	end;
+// 	int	color;
+// 	int	index;
+
+// 	start = -height / 2 + SCREEN_HEIGHT / 2;
+// 	if (start < 0)
+// 		start = 0;
+// 	end = height / 2 + SCREEN_HEIGHT / 2;
+//     if (end >= SCREEN_HEIGHT) 
+// 		end = SCREEN_HEIGHT - 1;
+// 	color = 0x0000FF00;
+// 	index = start;
+// 	while (index++ <= end)
+// 		mlx_pixel_put(info->mlx.ptr, info->mlx.win_ptr, i, index, color);
+// }
 
 int	draw_map(t_info *info)
 {
@@ -165,8 +194,9 @@ int	draw_map(t_info *info)
 		else
 			color = 0x000000FF;
 		for (int pixel = drawStart; pixel <= drawEnd; pixel++)
-			mlx_pixel_put(info->mlx.ptr, info->mlx.win_ptr, i, pixel, color);
+			*(unsigned int *)(info->screen.data + pixel * info->screen.line_size + i * (info->screen.bpp / 8)) = color;
 	}
+	mlx_put_image_to_window(info->mlx.ptr, info->mlx.win_ptr, info->screen.ptr, 0, 0);
 	return (0);
 }
 
@@ -194,6 +224,8 @@ int	main()
 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
+	info->screen.ptr = mlx_new_image(info->mlx.ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
+	info->screen.data = mlx_get_data_addr(info->screen.ptr, &(info->screen.bpp), &(info->screen.line_size), &(info->screen.endian));
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, NULL);
 	mlx_loop_hook(mlx, draw_map, info);

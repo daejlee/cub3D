@@ -54,6 +54,17 @@ typedef struct s_info
 	double		old_time;
 }	t_info;
 
+typedef struct s_line_info
+{
+	double		x;
+	double		height;
+	t_dvector	ray;
+	t_dvector	delta;
+	t_ivector	ray_pos;
+	t_dvector	ray_len;
+	t_info		*info;
+}	t_line_info;
+
 char worldMap[MAP_WIDTH][MAP_HEIGHT]=
 {
   {'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'},
@@ -95,106 +106,104 @@ int	on_keydown(int keycode)
 	return (0);
 }
 
-// void	draw_line(int height)
-// {
-// 	int	start;
-// 	int	end;
-// 	int	color;
-// 	int	index;
+t_line_info	*set_line_info(t_info *info, int x_pixel)
+{
+	t_line_info *line;
 
-// 	start = -height / 2 + SCREEN_HEIGHT / 2;
-// 	if (start < 0)
-// 		start = 0;
-// 	end = height / 2 + SCREEN_HEIGHT / 2;
-//     if (end >= SCREEN_HEIGHT) 
-// 		end = SCREEN_HEIGHT - 1;
-// 	color = 0x0000FF00;
-// 	index = start;
-// 	while (index++ <= end)
-// 		mlx_pixel_put(info->mlx.ptr, info->mlx.win_ptr, i, index, color);
-// }
+	line = (t_line_info *)malloc(sizeof(t_line_info));
+	if (!line)
+		return (NULL);
+	line->x = 2 * x_pixel / (double)SCREEN_WIDTH - 1;
+	line->ray.x = info->dir.x + info->plane.x * line->x;
+	line->ray.y = info->dir.y + info->plane.y * line->x;
+	line->ray_pos.x = (int)info->pos.x;
+	line->ray_pos.y = (int)info->pos.y;
+	line->delta.x = fabs(1 / line->ray.x);
+    line->delta.y = fabs(1 / line->ray.y);
+	if (line->ray.x < 0)
+		line->ray_len.x = (info->pos.x - line->ray_pos.x) * line->delta.x;
+	else
+		line->ray_len.x = (line->ray_pos.x + 1.0 - info->pos.x) * line->delta.x;
+	if (line->ray.y < 0)
+		line->ray_len.y = (info->pos.y - line->ray_pos.y) * line->delta.y;
+	else
+		line->ray_len.y = (line->ray_pos.y + 1.0 - info->pos.y) * line->delta.y;
+	line->info = info;
+	return (line);
+}
+
+int	dda_algorithm(t_line_info *line)
+{
+	int	hit_wall;
+	int	side;
+
+	hit_wall = 0;
+	while (hit_wall == 0)
+	{
+		if (line->ray_len.x < line->ray_len.y)
+		{
+			line->ray_len.x += line->delta.x;
+			if (line->ray.x < 0)
+				line->ray_pos.x += -1;
+			else
+				line->ray_pos.x += 1;
+			side = 0;
+		}
+		else
+		{
+			line->ray_len.y += line->delta.y;
+			if (line->ray.y < 0)
+				line->ray_pos.y += -1;
+			else
+				line->ray_pos.y += 1;
+			side = 1;
+		}
+		if (worldMap[line->ray_pos.x][line->ray_pos.y] > '0')
+			hit_wall = 1;
+	}
+	return (side);
+}
+
+int	draw_line(int side, int x_pixel, t_line_info *line)
+{
+	double	wall_dist;
+	int		wall_height;
+	int		start;
+	int		end;
+	int		color;
+
+	if (side == 0)
+		wall_dist = (line->ray_len.x - line->delta.x);
+	else
+		wall_dist = (line->ray_len.y - line->delta.y);
+	wall_height = (int)(SCREEN_HEIGHT / wall_dist);
+	start = -wall_height / 2 + SCREEN_HEIGHT / 2;
+	if (start < 0)
+		start = 0;
+	end = wall_height / 2 + SCREEN_HEIGHT / 2;
+	if (end >= SCREEN_HEIGHT)
+		end = SCREEN_HEIGHT - 1;
+	if (side == 0)
+		color = 0x0000FF00;
+	else
+		color = 0x000000FF;
+	for (int pixel = start; pixel <= end; pixel++)
+		*(unsigned int *)(line->info->screen.data + pixel * line->info->screen.line_size + x_pixel * (line->info->screen.bpp / 8)) = color;
+	return (0);
+}
 
 int	draw_map(t_info *info)
 {
-	for (int i = 0; i < SCREEN_WIDTH; i++)
+	t_line_info *line;
+	int	x_pixel;
+	int	side;
+
+	x_pixel = -1;
+	while (++x_pixel < SCREEN_WIDTH)
 	{
-		t_dvector	ray;
-		t_dvector	side_dist;
-		t_dvector	delta_dist;
-		t_ivector	map;
-		t_ivector	step;
-		double		perpWallDist;
-		double		screen_x;
-		int			hit = 0;
-		int			side;
-		
-		screen_x = 2 * i / (double)SCREEN_WIDTH - 1;
-		ray.x = info->dir.x + info->plane.x * screen_x;
-		ray.y = info->dir.y + info->plane.y * screen_x;
-
-		map.x = (int)info->pos.x;
-		map.y = (int)info->pos.y;
-
-		delta_dist.x = (ray.x == 0) ? 1e30 : fabs(1 / ray.x);
-    	delta_dist.y = (ray.y == 0) ? 1e30 : fabs(1 / ray.y);
-
-		if (ray.x < 0)
-    	{
-        	step.x = -1;
-        	side_dist.x = (info->pos.x - map.x) * delta_dist.x;
-    	}
-    	else
-    	{
-    		step.x = 1;
-    		side_dist.x = (map.x + 1.0 - info->pos.x) * delta_dist.x;
-    	}
-    	if (ray.y < 0)
-    	{
-        	step.y = -1;
-        	side_dist.y = (info->pos.y - map.y) * delta_dist.y;
-    	}
-    	else
-    	{
-        	step.y = 1;
-        	side_dist.y = (map.y + 1.0 - info->pos.y) * delta_dist.y;
-    	}
-
-		//perform DDA
-    	while (hit == 0)
-    	{
-        	//jump to next map square, either in x-direction, or in y-direction
-        	if(side_dist.x < side_dist.y)
-        	{
-        		side_dist.x += delta_dist.x;
-        		map.x += step.x;
-        		side = 0;
-    		}
-     	   else
-    		{
-    			side_dist.y += delta_dist.y;
-        		map.y += step.y;
-    			side = 1;
-			}
-    		//Check if ray has hit a wall
-			if(worldMap[map.x][map.y] > '0') hit = 1;
-		}
-
-		if (side == 0) perpWallDist = (side_dist.x - delta_dist.x);
-    	else          perpWallDist = (side_dist.y - delta_dist.y);
-
-    	int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
-
-		int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
-    	if(drawStart < 0) drawStart = 0;
-    	int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
-    	if(drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
-		int	color;
-		if (side == 0)
-			color = 0x0000FF00;
-		else
-			color = 0x000000FF;
-		for (int pixel = drawStart; pixel <= drawEnd; pixel++)
-			*(unsigned int *)(info->screen.data + pixel * info->screen.line_size + i * (info->screen.bpp / 8)) = color;
+		line = set_line_info(info, x_pixel);
+		side = dda_algorithm(line);
+		draw_line(side, x_pixel, line);
 	}
 	mlx_put_image_to_window(info->mlx.ptr, info->mlx.win_ptr, info->screen.ptr, 0, 0);
 	return (0);

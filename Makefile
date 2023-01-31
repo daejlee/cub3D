@@ -3,44 +3,48 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daejlee <daejlee@student.42.kr>            +#+  +:+       +#+         #
+#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/01/27 15:51:49 by daejlee          ###   ########.fr        #
+#    Updated: 2023/01/31 21:52:17 by daejlee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		= cub3D
-CFLAGS 		= -Wall -Wextra -Werror
+
+CFLAGS 		= -g #-Wall -Wextra -Werror
 CC 			= cc
-SRC 		= main.c
-OBJ 		= $(SRC:.c=.o)
+RM			= rm -f
+
+INCLUDE 	= -I./include -I$(MLX_DIR)
+LIBRARY 	= -L$(LIBFT_DIR) -lft ./libmlx.dylib
+
+SRCS 		= main.c
+
+OBJS 		= $(SRCS:.c=.o)
+
 LIBFT 		= ./libft_garage/libft.a
 LIBFT_DIR	= ./libft_garage/
+
 MLX_DIR		= ./minilibx_mms_20200219/
 MLX_FLAGS	=  -framework OpenGL -framework Appkit
 
-INCLUDE = -I./include -I$(MLX_DIR)
-LIBRARY = -L$(LIBFT_DIR) -lft ./libmlx.dylib
-
 all : $(NAME)
 
-$(NAME) : $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) -g -o $(NAME) $(OBJ) $(LIBRARY) $(MLX_FLAGS)
+$(NAME) : $(OBJS)
+	$(MAKE) all -C $(LIBFT_DIR)
+	$(CC) $(CFLAGS) $(LIBRARY) $(MLX_FLAGS) -o $@ $^
 
-$(OBJ) : $(SRC)
-	$(CC) $(CFLAGS) -c $(INCLUDE) $(SRC)
-
-$(LIBFT) :
-	cd $(LIBFT_DIR); $(MAKE)
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 clean :
-	rm -f $(OBJ)
-	make -C libft_garage/ clean
+	$(MAKE) clean -C $(LIBFT_DIR)
+	$(RM) $(OBJS)
 
-fclean :
-	rm -f $(OBJ) $(NAME)
-	make -C libft_garage/ fclean
+fclean : clean
+	$(MAKE) fclean -C $(LIBFT_DIR)
+	$(RM) $(NAME)
 
 re :
 	$(MAKE) fclean

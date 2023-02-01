@@ -20,6 +20,7 @@
 # define ON_DESTROY_EVENT 17
 
 # define ROTATE_SPEED 0.05
+# define MOVE_SPEED 0.1
 
 typedef struct s_mlx
 {
@@ -118,6 +119,27 @@ void	rotate(t_info *info, int dir)
 	info->plane.y = old_plane_x * sin(speed) + info->plane.y * cos(speed);
 }
 
+void	move(t_info *info, double dir_x, double dir_y)
+{
+	t_dvector	next_pos;
+
+	if (dir_x * dir_y > 0)
+	{
+		next_pos.x = info->pos.x + info->dir.x * MOVE_SPEED * dir_x;
+		next_pos.y = info->pos.y + info->dir.y * MOVE_SPEED * dir_y;
+	}
+	else
+	{
+		next_pos.x = info->pos.x + info->dir.y * MOVE_SPEED * dir_x;
+		next_pos.y = info->pos.y + info->dir.x * MOVE_SPEED * dir_y;
+	}
+	if (worldMap[(int)next_pos.x][(int)next_pos.y] == '0')
+	{
+		info->pos.x = next_pos.x;
+		info->pos.y = next_pos.y;
+	}
+}
+
 int	on_keydown(int keycode, t_info *info)
 {
 	if (keycode == BUTTON_ESC)
@@ -126,6 +148,14 @@ int	on_keydown(int keycode, t_info *info)
 		rotate(info, 1);
 	else if (keycode == BUTTON_RIGHT)
 		rotate(info, -1);
+	else if (keycode == BUTTON_W)
+		move(info, 1, 1);
+	else if (keycode == BUTTON_A)
+		move(info, -1, 1);
+	else if (keycode == BUTTON_S)
+		move(info, -1, -1);
+	else if (keycode == BUTTON_D)
+		move(info, 1, -1);
 	return (0);
 }
 
@@ -234,8 +264,6 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	end = wall_height / 2 + SCREEN_HEIGHT / 2;
 	if (end >= SCREEN_HEIGHT)
 		end = SCREEN_HEIGHT - 1;
-	if (start == 0 && end == SCREEN_HEIGHT - 1)
-		printf("ray_dir x: %lf, ray_dir y: %lf, wall_height: %d, wall_dist: %lf\n", line->ray.x, line->ray.y, wall_height, wall_dist);
 	if (side == 0)
 		color = 0x0000FF00;
 	else

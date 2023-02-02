@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
+#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/02 16:37:31 by hkong            ###   ########.fr        #
+#    Updated: 2023/02/02 16:40:29 by daejlee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ RM			= rm -f
 INCLUDE 	= -I./include -I$(MLX_DIR)
 LIBRARY 	= -L$(LIBFT_DIR) -lft ./libmlx.dylib
 
-SRCS 		= main.c
+SRC 		= main.c
 
-OBJS 		= $(SRCS:.c=.o)
+OBJ 		= $(SRC:.c=.o)
 
 LIBFT 		= ./libft_garage/libft.a
 LIBFT_DIR	= ./libft_garage/
@@ -36,7 +36,8 @@ all : $(NAME)
 m1 :
 	arch -x86_64 make
 
-$(NAME) : $(OBJ) $(LIBFT)
+$(NAME) : $(OBJ)
+	$(MAKE) all -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) -g -o $(NAME) $(OBJ) $(LIBRARY) $(MLX_FLAGS)
 
 $(OBJ) : $(SRC)

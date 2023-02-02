@@ -6,7 +6,7 @@
 #    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/02 16:40:29 by daejlee          ###   ########.fr        #
+#    Updated: 2023/02/02 16:44:17 by daejlee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ $(OBJ) : $(SRC)
 
 clean :
 	$(MAKE) clean -C $(LIBFT_DIR)
-	$(RM) $(OBJS)
+	$(RM) $(OBJ)
 
 fclean : clean
 	$(MAKE) fclean -C $(LIBFT_DIR)

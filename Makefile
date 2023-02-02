@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
+#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/02 17:34:37 by hkong            ###   ########.fr        #
+#    Updated: 2023/02/02 22:19:45 by daejlee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,10 @@ CFLAGS 		= -g -Wall -Wextra -Werror
 CC 			= cc
 RM			= rm -f
 
-SRC 		= main.c control.c
+INCLUDE 	= -I./include -I$(MLX_DIR) -I./libft_garage/libft
+LIBRARY 	= -L$(LIBFT_DIR) -lft -lmlx
+
+SRC 		= main.c
 
 OBJ 		= $(SRC:.c=.o)
 
@@ -24,9 +27,6 @@ LIBFT_DIR	= ./libft_garage/
 
 MLX_DIR		= ./minilibx_mms_20200219/
 MLX_FLAGS	=  -framework OpenGL -framework Appkit
-
-INCLUDE = -I./include -I$(MLX_DIR)
-LIBRARY = -L$(LIBFT_DIR) -lft -lmlx
 
 all : $(NAME)
 

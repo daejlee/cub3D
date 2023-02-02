@@ -66,6 +66,9 @@ typedef struct s_info
 	t_img		screen;
 	t_img		wall[4];
 	double		old_time;
+	char		**map;
+	int			floor;
+	int			ceil;
 }	t_info;
 
 typedef struct s_line_info
@@ -332,6 +335,7 @@ void	set_image(t_info *info, t_img *image, char *filename)
 	int	width;
 	int	height;
 
+	//todo: file 존재/형식 올바른지 확인
 	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
 }

@@ -22,6 +22,14 @@
 # define ROTATE_SPEED 0.05
 # define MOVE_SPEED 0.1
 
+enum wall_dir
+{
+	NORTH = 0,
+	SOUTH,
+	EAST,
+	WEST,
+};
+
 typedef struct s_mlx
 {
 	void	*ptr;
@@ -56,6 +64,7 @@ typedef struct s_info
 	t_dvector	dir;
 	t_dvector	plane;
 	t_img		screen;
+	t_img		wall[4];
 	double		old_time;
 }	t_info;
 
@@ -251,7 +260,7 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	int		wall_height;
 	int		start;
 	int		end;
-	int		color;
+	int		wall;
 
 	if (side == 0)
 		wall_dist = (line->ray_len.x - line->delta.x);
@@ -265,11 +274,38 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	if (end >= SCREEN_HEIGHT)
 		end = SCREEN_HEIGHT - 1;
 	if (side == 0)
-		color = 0x0000FF00;
+	{
+		if (line->ray_pos.x >= line->info->pos.x)
+			wall = NORTH;
+		else
+			wall = SOUTH;
+	}
 	else
-		color = 0x000000FF;
+	{
+		if (line->ray_pos.y >= line->info->pos.y)
+			wall = EAST;
+		else
+			wall = WEST;
+	}
+	double wallX;
+	if (side == 0)
+		wallX = line->info->pos.y + wall_dist * line->ray.y;
+	else
+		wallX = line->info->pos.x + wall_dist * line->ray.x;
+	wallX -= floor(wallX);
+
+	int texX = (int)(wallX * (double)64);
+	if (side == 0 && line->ray.x > 0) texX = 64 - texX -1;
+	if (side == 1 && line->ray.y < 0) texX = 64 - texX -1;
+	double step = 1.0 * 64 / wall_height;
+	double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
 	for (int pixel = start; pixel <= end; pixel++)
+	{
+		int texY = (int)texPos & (64 - 1);
+		texPos += step;
+		unsigned int color = *(unsigned int *)(line->info->wall[wall].data + texY * line->info->wall[wall].line_size + texX * (line->info->wall[wall].bpp / 8));
 		*(unsigned int *)(line->info->screen.data + pixel * line->info->screen.line_size + x_pixel * (line->info->screen.bpp / 8)) = color;
+	}
 	return (0);
 }
 
@@ -289,6 +325,15 @@ int	draw_map(t_info *info)
 	}
 	mlx_put_image_to_window(info->mlx.ptr, info->mlx.win_ptr, info->screen.ptr, 0, 0);
 	return (0);
+}
+
+void	set_image(t_info *info, t_img *image, char *filename)
+{
+	int	width;
+	int	height;
+
+	image->ptr = mlx_png_file_to_image(info->mlx.ptr, filename, &width, &height);
+	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
 }
 
 int	main()
@@ -316,6 +361,10 @@ int	main()
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
 	info->screen.ptr = NULL;
+	set_image(info, info->wall + NORTH, "source/wood.png");
+	set_image(info, info->wall + SOUTH, "source/redbrick.png");
+	set_image(info, info->wall + EAST, "source/bluestone.png");
+	set_image(info, info->wall + WEST, "source/colorstone.png");
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
 	mlx_loop_hook(mlx, draw_map, info);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/02 16:44:17 by daejlee          ###   ########.fr        #
+#    Updated: 2023/02/02 17:34:37 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,7 @@ CFLAGS 		= -g -Wall -Wextra -Werror
 CC 			= cc
 RM			= rm -f
 
-INCLUDE 	= -I./include -I$(MLX_DIR)
-LIBRARY 	= -L$(LIBFT_DIR) -lft ./libmlx.dylib
-
-SRC 		= main.c
+SRC 		= main.c control.c
 
 OBJ 		= $(SRC:.c=.o)
 
@@ -39,9 +36,6 @@ m1 :
 $(NAME) : $(OBJ)
 	$(MAKE) all -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) -g -o $(NAME) $(OBJ) $(LIBRARY) $(MLX_FLAGS)
-
-$(OBJ) : $(SRC)
-	$(CC) $(CFLAGS) -c $(INCLUDE) $(SRC)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

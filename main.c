@@ -1,88 +1,18 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-#include <mlx.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
+/*   Updated: 2023/02/02 22:00:04 by hkong            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# define SCREEN_WIDTH 640
-# define SCREEN_HEIGHT 480
-# define MAP_WIDTH 24
-# define MAP_HEIGHT 24
+#include "cub3d.h"
 
-# define BUTTON_W 13
-# define BUTTON_A 0
-# define BUTTON_S 1
-# define BUTTON_D 2
-# define BUTTON_LEFT 123
-# define BUTTON_RIGHT 124
-# define BUTTON_ESC 53
-# define ON_KEYDOWN_EVENT 2
-# define ON_DESTROY_EVENT 17
-
-# define ROTATE_SPEED 0.05
-# define MOVE_SPEED 0.1
-
-enum wall_dir
-{
-	NORTH = 0,
-	SOUTH,
-	EAST,
-	WEST,
-};
-
-typedef struct s_mlx
-{
-	void	*ptr;
-	void	*win_ptr;
-}	t_mlx;
-
-typedef struct s_img
-{
-	void	*ptr;
-	char	*data;
-	int		bpp;
-	int		line_size;
-	int		endian;
-}	t_img;
-
-typedef struct s_dvector
-{
-	double	x;
-	double	y;
-}	t_dvector;
-
-typedef struct s_ivector
-{
-	int	x;
-	int	y;
-}	t_ivector;
-
-typedef struct s_info
-{
-	t_mlx		mlx;
-	t_dvector	pos;
-	t_dvector	dir;
-	t_dvector	plane;
-	t_img		screen;
-	t_img		wall[4];
-	double		old_time;
-	char		**map;
-	int			floor;
-	int			ceil;
-}	t_info;
-
-typedef struct s_line_info
-{
-	double		x;
-	double		height;
-	t_dvector	ray;
-	t_dvector	delta;
-	t_ivector	ray_pos;
-	t_dvector	ray_len;
-	t_info		*info;
-}	t_line_info;
-
-char worldMap[MAP_WIDTH][MAP_HEIGHT]=
+const char worldMap[MAP_WIDTH][MAP_HEIGHT]=
 {
   {'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'},
   {'1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'},
@@ -110,80 +40,32 @@ char worldMap[MAP_WIDTH][MAP_HEIGHT]=
   {'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'}
 };
 
-int	on_destroy(void)
+void	set_pixel(t_img image, int x, int y, unsigned int color)
 {
-	exit(0);
-	return (0);
+	*(unsigned int *)(image.data + \
+						x * image.line_size + y * (image.bpp / 8)) = color;
 }
 
-void	rotate(t_info *info, int dir)
+unsigned int	get_pixel(t_img image, int x, int y)
 {
-	double	old_dir_x;
-	double	old_plane_x;
-	double	speed;
+	unsigned int color;
 
-	speed = ROTATE_SPEED * dir;
-	old_dir_x = info->dir.x;
-	info->dir.x = info->dir.x * cos(speed) - info->dir.y * sin(speed);
-	info->dir.y = old_dir_x * sin(speed) + info->dir.y * cos(speed);
-	old_plane_x = info->plane.x;
-	info->plane.x = info->plane.x * cos(speed) - info->plane.y * sin(speed);
-	info->plane.y = old_plane_x * sin(speed) + info->plane.y * cos(speed);
-}
-
-void	move(t_info *info, double dir_x, double dir_y)
-{
-	t_dvector	next_pos;
-
-	if (dir_x * dir_y > 0)
-	{
-		next_pos.x = info->pos.x + info->dir.x * MOVE_SPEED * dir_x;
-		next_pos.y = info->pos.y + info->dir.y * MOVE_SPEED * dir_y;
-	}
-	else
-	{
-		next_pos.x = info->pos.x + info->dir.y * MOVE_SPEED * dir_x;
-		next_pos.y = info->pos.y + info->dir.x * MOVE_SPEED * dir_y;
-	}
-	if (worldMap[(int)next_pos.x][(int)next_pos.y] == '0')
-	{
-		info->pos.x = next_pos.x;
-		info->pos.y = next_pos.y;
-	}
-}
-
-int	on_keydown(int keycode, t_info *info)
-{
-	if (keycode == BUTTON_ESC)
-		exit(0);
-	else if (keycode == BUTTON_LEFT)
-		rotate(info, 1);
-	else if (keycode == BUTTON_RIGHT)
-		rotate(info, -1);
-	else if (keycode == BUTTON_W)
-		move(info, 1, 1);
-	else if (keycode == BUTTON_A)
-		move(info, -1, 1);
-	else if (keycode == BUTTON_S)
-		move(info, -1, -1);
-	else if (keycode == BUTTON_D)
-		move(info, 1, -1);
-	return (0);
+	color = *(unsigned int *)(image.data \
+								+ x * image.line_size + y * (image.bpp / 8));
+	return (color);
 }
 
 void	draw_default_screen(t_info *info)
 {
 	t_ivector	index;
-	int			floor_color;
-	int			ceil_color;
 	int			color;
 
 	if (info->screen.ptr)
 		mlx_destroy_image(info->mlx.ptr, info->screen.ptr);
-	info->screen.ptr = mlx_new_image(info->mlx.ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	info->screen.data = mlx_get_data_addr(info->screen.ptr, &(info->screen.bpp), &(info->screen.line_size), &(info->screen.endian));
-	ceil_color = 0x0099CCFF;
-	floor_color = 0x00808080;
+	info->screen.ptr = mlx_new_image(info->mlx.ptr, \
+										SCREEN_WIDTH, SCREEN_HEIGHT);
+	info->screen.data = mlx_get_data_addr(info->screen.ptr, \
+		&(info->screen.bpp), &(info->screen.line_size), &(info->screen.endian));
 	index.x = -1;
 	while (++index.x < SCREEN_HEIGHT)
 	{
@@ -191,10 +73,10 @@ void	draw_default_screen(t_info *info)
 		while (++index.y < SCREEN_WIDTH)
 		{
 			if (index.x < SCREEN_HEIGHT / 2)
-				color = ceil_color;
+				color = info->ceil;
 			else
-				color = floor_color;
-			*(unsigned int *)(info->screen.data + index.x * info->screen.line_size + index.y * (info->screen.bpp / 8)) = color;
+				color = info->floor;
+			set_pixel(info->screen, index.x, index.y, color);
 		}
 	}
 }
@@ -297,17 +179,20 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 		wallX = line->info->pos.x + wall_dist * line->ray.x;
 	wallX -= floor(wallX);
 
-	int texX = (int)(wallX * (double)64);
-	if (side == 0 && line->ray.x > 0) texX = 64 - texX -1;
-	if (side == 1 && line->ray.y < 0) texX = 64 - texX -1;
-	double step = 1.0 * 64 / wall_height;
-	double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
+	int texX = (int)(wallX * (double)TEXTURE_SIZE);
+	if (side == 0 && line->ray.x > 0) texX = TEXTURE_SIZE - texX -1;
+	if (side == 1 && line->ray.y < 0) texX = TEXTURE_SIZE - texX -1;
+	double step = 1.0 * TEXTURE_SIZE / wall_height;
+	double texPos = 0;
+	if (SCREEN_HEIGHT/2 - wall_height/2 < 0)
+		texPos = (-SCREEN_HEIGHT/2 + wall_height/2) * step;
+	// double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
 	for (int pixel = start; pixel <= end; pixel++)
 	{
-		int texY = (int)texPos & (64 - 1);
+		int texY = (int)texPos & (TEXTURE_SIZE - 1);
 		texPos += step;
-		unsigned int color = *(unsigned int *)(line->info->wall[wall].data + texY * line->info->wall[wall].line_size + texX * (line->info->wall[wall].bpp / 8));
-		*(unsigned int *)(line->info->screen.data + pixel * line->info->screen.line_size + x_pixel * (line->info->screen.bpp / 8)) = color;
+		unsigned int color = get_pixel(line->info->wall[wall], texY, texX);
+		set_pixel(line->info->screen, pixel, x_pixel, color);
 	}
 	return (0);
 }
@@ -356,8 +241,8 @@ int main(void)
 	/* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
 	info->plane.x = 0;
 	info->plane.y = 0.66;
-	/* time of previous frame */
-	info->old_time = 0;
+	info->ceil = 0x0099CCFF;
+	info->floor = 0x00808080;
 
 	/* mlx 초기화 및 hook */
 	mlx = mlx_init();
@@ -365,10 +250,10 @@ int main(void)
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
 	info->screen.ptr = NULL;
-	set_image(info, info->wall + NORTH, "source/wood.xpm");
-	set_image(info, info->wall + SOUTH, "source/redbrick.xpm");
-	set_image(info, info->wall + EAST, "source/bluestone.xpm");
-	set_image(info, info->wall + WEST, "source/colorstone.xpm");
+	set_image(info, info->wall + NORTH, "source/wall1.xpm");
+	set_image(info, info->wall + SOUTH, "source/wall5.xpm");
+	set_image(info, info->wall + EAST, "source/wall3.xpm");
+	set_image(info, info->wall + WEST, "source/wall4.xpm");
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
 	mlx_loop_hook(mlx, draw_map, info);

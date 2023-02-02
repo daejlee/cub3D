@@ -3,16 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/01/31 21:52:17 by daejlee          ###   ########.fr        #
+#    Updated: 2023/02/02 16:37:31 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		= cub3D
-
-CFLAGS 		= -g #-Wall -Wextra -Werror
+CFLAGS 		= -g -Wall -Wextra -Werror
 CC 			= cc
 RM			= rm -f
 
@@ -29,11 +28,19 @@ LIBFT_DIR	= ./libft_garage/
 MLX_DIR		= ./minilibx_mms_20200219/
 MLX_FLAGS	=  -framework OpenGL -framework Appkit
 
+INCLUDE = -I./include -I$(MLX_DIR)
+LIBRARY = -L$(LIBFT_DIR) -lft -lmlx
+
 all : $(NAME)
 
-$(NAME) : $(OBJS)
-	$(MAKE) all -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(LIBRARY) $(MLX_FLAGS) -o $@ $^
+m1 :
+	arch -x86_64 make
+
+$(NAME) : $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) -g -o $(NAME) $(OBJ) $(LIBRARY) $(MLX_FLAGS)
+
+$(OBJ) : $(SRC)
+	$(CC) $(CFLAGS) -c $(INCLUDE) $(SRC)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

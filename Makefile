@@ -6,7 +6,7 @@
 #    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/01/28 19:22:36 by hkong            ###   ########.fr        #
+#    Updated: 2023/02/02 16:30:43 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ MLX_DIR		= ./minilibx_mms_20200219/
 MLX_FLAGS	=  -framework OpenGL -framework Appkit
 
 INCLUDE = -I./include -I$(MLX_DIR)
-LIBRARY = -L$(LIBFT_DIR) -lft ./libmlx.dylib #-lmlx
+LIBRARY = -L$(LIBFT_DIR) -lft -lmlx
 
 all : $(NAME)
 

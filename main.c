@@ -332,7 +332,7 @@ void	set_image(t_info *info, t_img *image, char *filename)
 	int	width;
 	int	height;
 
-	image->ptr = mlx_png_file_to_image(info->mlx.ptr, filename, &width, &height);
+	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
 }
 
@@ -361,10 +361,10 @@ int	main()
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
 	info->screen.ptr = NULL;
-	set_image(info, info->wall + NORTH, "source/wood.png");
-	set_image(info, info->wall + SOUTH, "source/redbrick.png");
-	set_image(info, info->wall + EAST, "source/bluestone.png");
-	set_image(info, info->wall + WEST, "source/colorstone.png");
+	set_image(info, info->wall + NORTH, "source/wood.xpm");
+	set_image(info, info->wall + SOUTH, "source/redbrick.xpm");
+	set_image(info, info->wall + EAST, "source/bluestone.xpm");
+	set_image(info, info->wall + WEST, "source/colorstone.xpm");
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
 	mlx_loop_hook(mlx, draw_map, info);

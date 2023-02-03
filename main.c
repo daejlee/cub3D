@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/03 20:51:33 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/03 22:13:03 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	set_pixel(t_img image, int x, int y, unsigned int color)
 
 unsigned int	get_pixel(t_img image, int x, int y)
 {
-	unsigned int color;
+	unsigned int	color;
 
 	color = *(unsigned int *)(image.data \
 								+ x * image.line_size + y * (image.bpp / 8));
@@ -83,7 +83,7 @@ void	draw_default_screen(t_info *info)
 
 t_line_info	*set_line_info(t_info *info, int x_pixel)
 {
-	t_line_info *line;
+	t_line_info	*line;
 
 	line = (t_line_info *)malloc(sizeof(t_line_info));
 	if (!line)
@@ -94,7 +94,7 @@ t_line_info	*set_line_info(t_info *info, int x_pixel)
 	line->ray_pos.x = (int)info->pos.x;
 	line->ray_pos.y = (int)info->pos.y;
 	line->delta.x = fabs(1 / line->ray.x);
-    line->delta.y = fabs(1 / line->ray.y);
+	line->delta.y = fabs(1 / line->ray.y);
 	if (line->ray.x < 0)
 		line->ray_len.x = (info->pos.x - line->ray_pos.x) * line->delta.x;
 	else
@@ -105,6 +105,13 @@ t_line_info	*set_line_info(t_info *info, int x_pixel)
 		line->ray_len.y = (line->ray_pos.y + 1.0 - info->pos.y) * line->delta.y;
 	line->info = info;
 	return (line);
+}
+
+int	step_dir(double ray)
+{
+	if (ray < 0)
+		return (-1);
+	return (1);
 }
 
 int	dda_algorithm(t_line_info *line)
@@ -118,25 +125,95 @@ int	dda_algorithm(t_line_info *line)
 		if (line->ray_len.x < line->ray_len.y)
 		{
 			line->ray_len.x += line->delta.x;
-			if (line->ray.x < 0)
-				line->ray_pos.x += -1;
-			else
-				line->ray_pos.x += 1;
+			line->ray_pos.x += step_dir(line->ray.x);
 			side = 0;
 		}
 		else
 		{
 			line->ray_len.y += line->delta.y;
-			if (line->ray.y < 0)
-				line->ray_pos.y += -1;
-			else
-				line->ray_pos.y += 1;
+			line->ray_pos.y += step_dir(line->ray.y);
 			side = 1;
 		}
-		if (worldMap[line->ray_pos.x][line->ray_pos.y] > '0')
+		if (worldMap[line->ray_pos.x][line->ray_pos.y] == '1')
 			hit_wall = 1;
 	}
 	return (side);
+}
+
+enum wall_dir	get_wall_dir(t_line_info *line, int side)
+{
+	if (side == 0)
+	{
+		if (line->ray_pos.x >= line->info->pos.x)
+			return (NORTH);
+		else
+			return (SOUTH);
+	}
+	if (line->ray_pos.y >= line->info->pos.y)
+		return (EAST);
+	return (WEST);
+}
+
+int	get_texture_x(t_line_info *line, int side, double wall_dist)
+{
+	double	wall_x;
+	int		texture_x;
+
+	if (side == 0)
+		wall_x = line->info->pos.y + wall_dist * line->ray.y;
+	else
+		wall_x = line->info->pos.x + wall_dist * line->ray.x;
+	wall_x -= floor(wall_x);
+	texture_x = (int)(wall_x * (double)TEXTURE_SIZE);
+	if ((side == 0 && line->ray.x > 0) || (side == 1 && line->ray.y < 0))
+		texture_x = TEXTURE_SIZE - texture_x -1;
+	return (texture_x);
+}
+
+int	get_wall_start(int wall_height)
+{
+	int	start;
+
+	start = -wall_height / 2 + SCREEN_HEIGHT / 2;
+	if (start < 0)
+		start = 0;
+	return (start);
+}
+
+int	get_wall_end(int wall_height)
+{
+	int	end;
+
+	end = wall_height / 2 + SCREEN_HEIGHT / 2;
+	if (end >= SCREEN_HEIGHT)
+		end = SCREEN_HEIGHT - 1;
+	return (end);
+}
+
+int	draw_wall(t_info *info, int wall_height, int texture_x, enum wall_dir wall_dir)
+{
+	t_ivector		pixel;
+	double			accurate_tex_y;
+	double			texture_step;
+	unsigned int	color;
+	int				texture_y;
+
+	texture_step = (double)TEXTURE_SIZE / wall_height;
+	accurate_tex_y = 0;
+	if (SCREEN_HEIGHT / 2 - wall_height / 2 < 0)
+		accurate_tex_y = (-SCREEN_HEIGHT / 2 + wall_height / 2) * texture_step;
+	pixel.y = get_wall_start(wall_height);
+	while (pixel.y <= get_wall_end(wall_height))
+	{
+		texture_y = (int)accurate_tex_y;
+		if (texture_y >= TEXTURE_SIZE)
+			texture_y -= TEXTURE_SIZE;
+		accurate_tex_y += texture_step;
+		color = get_pixel(info->wall[wall_dir], texture_y, texture_x);
+		if(side == 1) color = (color >> 1) & 8355711;
+		set_pixel(info->screen, pixel.y, pixel.x, color);
+		pixel.y++;
+	}
 }
 
 int	draw_line(int side, int x_pixel, t_line_info *line)
@@ -145,55 +222,34 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	int		wall_height;
 	int		start;
 	int		end;
-	int		wall;
+	int		wall_dir;
+	int		texX;
 
 	if (side == 0)
 		wall_dist = (line->ray_len.x - line->delta.x);
 	else
 		wall_dist = (line->ray_len.y - line->delta.y);
 	wall_height = (int)(SCREEN_HEIGHT / wall_dist);
+	wall_dir = get_wall_dir(line, side);
+	texX = get_texture_x(line, side, wall_dist);
+	double step = 1.0 * TEXTURE_SIZE / wall_height;
+	double texPos = 0;
+	if (SCREEN_HEIGHT/2 - wall_height/2 < 0)
+		texPos = (-SCREEN_HEIGHT/2 + wall_height/2) * step;
+	// double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
 	start = -wall_height / 2 + SCREEN_HEIGHT / 2;
 	if (start < 0)
 		start = 0;
 	end = wall_height / 2 + SCREEN_HEIGHT / 2;
 	if (end >= SCREEN_HEIGHT)
 		end = SCREEN_HEIGHT - 1;
-	if (side == 0)
-	{
-		if (line->ray_pos.x >= line->info->pos.x)
-			wall = NORTH;
-		else
-			wall = SOUTH;
-	}
-	else
-	{
-		if (line->ray_pos.y >= line->info->pos.y)
-			wall = EAST;
-		else
-			wall = WEST;
-	}
-	double wallX;
-	if (side == 0)
-		wallX = line->info->pos.y + wall_dist * line->ray.y;
-	else
-		wallX = line->info->pos.x + wall_dist * line->ray.x;
-	wallX -= floor(wallX);
-
-	int texX = (int)(wallX * (double)TEXTURE_SIZE);
-	if (side == 0 && line->ray.x > 0) texX = TEXTURE_SIZE - texX -1;
-	if (side == 1 && line->ray.y < 0) texX = TEXTURE_SIZE - texX -1;
-	double step = 1.0 * TEXTURE_SIZE / wall_height;
-	double texPos = 0;
-	if (SCREEN_HEIGHT/2 - wall_height/2 < 0)
-		texPos = (-SCREEN_HEIGHT/2 + wall_height/2) * step;
-	// double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
 	for (int pixel = start; pixel <= end; pixel++)
 	{
 		int texY = (int)texPos;
 		if (texY >= TEXTURE_SIZE)
 			texY -= TEXTURE_SIZE;
 		texPos += step;
-		unsigned int color = get_pixel(line->info->wall[wall], texY, texX);
+		unsigned int color = get_pixel(line->info->wall[wall_dir], texY, texX);
 		if(side == 1) color = (color >> 1) & 8355711;
 		set_pixel(line->info->screen, pixel, x_pixel, color);
 	}

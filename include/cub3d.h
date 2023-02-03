@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/02 22:20:01 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/03 20:51:35 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 # include <stdio.h>
 # include <mlx.h>
 
-# define SCREEN_WIDTH 640
-# define SCREEN_HEIGHT 480
+# define SCREEN_WIDTH 1000
+# define SCREEN_HEIGHT 600
 # define MAP_WIDTH 24
 # define MAP_HEIGHT 24
-# define TEXTURE_SIZE 16
+# define TEXTURE_SIZE 32
 
 # define BUTTON_W 13
 # define BUTTON_A 0

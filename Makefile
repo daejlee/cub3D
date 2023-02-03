@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/02 22:19:45 by daejlee          ###   ########.fr        #
+#    Updated: 2023/02/03 16:27:30 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ RM			= rm -f
 INCLUDE 	= -I./include -I$(MLX_DIR) -I./libft_garage/libft
 LIBRARY 	= -L$(LIBFT_DIR) -lft -lmlx
 
-SRC 		= main.c
+SRC 		= main.c control.c
 
 OBJ 		= $(SRC:.c=.o)
 

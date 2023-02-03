@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/02 22:00:04 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/03 20:51:33 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,12 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	// double texPos = (start - SCREEN_HEIGHT / 2 - wall_height) * step;
 	for (int pixel = start; pixel <= end; pixel++)
 	{
-		int texY = (int)texPos & (TEXTURE_SIZE - 1);
+		int texY = (int)texPos;
+		if (texY >= TEXTURE_SIZE)
+			texY -= TEXTURE_SIZE;
 		texPos += step;
 		unsigned int color = get_pixel(line->info->wall[wall], texY, texX);
+		if(side == 1) color = (color >> 1) & 8355711;
 		set_pixel(line->info->screen, pixel, x_pixel, color);
 	}
 	return (0);
@@ -250,10 +253,10 @@ int main(void)
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
 	info->screen.ptr = NULL;
-	set_image(info, info->wall + NORTH, "source/wall1.xpm");
-	set_image(info, info->wall + SOUTH, "source/wall5.xpm");
-	set_image(info, info->wall + EAST, "source/wall3.xpm");
-	set_image(info, info->wall + WEST, "source/wall4.xpm");
+	set_image(info, info->wall + NORTH, "source/new1.xpm");
+	set_image(info, info->wall + SOUTH, "source/new2.xpm");
+	set_image(info, info->wall + EAST, "source/new3.xpm");
+	set_image(info, info->wall + WEST, "source/new4.xpm");
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
 	mlx_loop_hook(mlx, draw_map, info);

@@ -3,23 +3,31 @@
 #include "./libft_garage/gnl/get_next_line.h"
 #include <fcntl.h>
 
+void	free_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
 void	*set_image(t_info *info, t_img *image, char *filename)
 {
 	int	width;
 	int	height;
 
-	//todo: file 존재/형식 올바른지 확인
 	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
 	if (!image->ptr || !image->data)
 		return (NULL);
 }
 
-void	*parse_err(char *err_message)
+void	parse_err(char *err_message)
 {
 	write(2, err_message, ft_strlen(err_message));
-	//free
-	return (NULL);
+	exit(1);
 }
 
 int		is_cardinal_texture(char *gnl_buf)

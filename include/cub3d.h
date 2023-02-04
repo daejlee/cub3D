@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/03 20:51:35 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/04 17:34:52 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,18 @@ int		on_keydown(int keycode, t_info *info);
 int		on_destroy(void);
 void	rotate(t_info *info, int dir);
 void	move(t_info *info, double dir_x, double dir_y);
+
+/**
+ * parse.c
+ */
+
+/**
+ * parse_utils.c
+ */
+void	free_arr(char **arr);
+void	*set_image(t_info *info, t_img *image, char *filename);
+void	parse_err(char *err_message);
+int		is_cardinal_texture(char *gnl_buf);
+int		is_floor_ceiling_color(char *gnl_buf);
 
 #endif

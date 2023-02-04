@@ -1,6 +1,6 @@
-#include "./include/cub3d.h"
-#include "./libft_garage/libft/libft.h"
-#include "./libft_garage/gnl/get_next_line.h"
+#include "cub3d.h"
+#include "libft.h"
+#include "get_next_line.h"
 #include <fcntl.h>
 
 void	free_arr(char **arr)
@@ -24,9 +24,32 @@ void	*set_image(t_info *info, t_img *image, char *filename)
 		return (NULL);
 }
 
-void	parse_err(char *err_message)
+int		is_invaild_rgb_val(int rgb_val[3])
 {
-	write(2, err_message, ft_strlen(err_message));
+	if (rgb_val[0] < 0 || rgb_val[0] > 255)
+		return (0);
+	if (rgb_val[1] < 0 || rgb_val[1] > 255)
+		return (0);
+	if (rgb_val[2] < 0 || rgb_val[2] > 255)
+		return (0);
+	return (1);
+}
+
+void	parse_err(int err_code)
+{
+	if (!err_code)
+		write(2, "FATAL ERROR: MALLOC FAILED.", 28);
+	write(2, "parse error: ", 14);
+	if (err_code == CORRUPTED_MAP)
+		write(2, "corrupted map file.", 20);
+	else if (err_code == CORRUPTED_TEXTURE)
+		write(2, "corrupted texture file.", 24);
+	else if (err_code == NOT_ENOUGH_ELEM)
+		write(2, "not enough map elements.", 25);
+	else if (err_code == INVALID_ELEM)
+		write(2, "invalid element detedted.", 26);
+	else if (err_code == INVAILD_RGB_VAL)
+		write(2, "invalid floor/ceiling color val.", 33);
 	exit(1);
 }
 

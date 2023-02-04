@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/03 20:51:33 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/04 22:14:24 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,15 +218,15 @@ int	draw_map(t_info *info)
 	return (0);
 }
 
-void	set_image(t_info *info, t_img *image, char *filename)
-{
-	int	width;
-	int	height;
+// void	set_image(t_info *info, t_img *image, char *filename)
+// {
+// 	int	width;
+// 	int	height;
 
-	//todo: file 존재/형식 올바른지 확인
-	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
-	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
-}
+// 	//todo: file 존재/형식 올바른지 확인
+// 	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
+// 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
+// }
 
 int main(void)
 {

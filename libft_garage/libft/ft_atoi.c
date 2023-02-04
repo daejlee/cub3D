@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/19 15:26:54 by daejlee           #+#    #+#             */
-/*   Updated: 2022/03/30 14:31:05 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/04 17:48:48 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
+
 
 static const char	*blank_check(const char *nptr)
 {
@@ -48,11 +48,12 @@ int	ft_atoi(const char *nptr)
 	}
 	else if (nptr[i] == '+')
 		i++;
+	else if (nptr[i] > '9' || nptr[i] < '0')
+		return (-1);
 	while (nptr[i] <= '9' && nptr[i] >= '0')
 	{
 		res = res * 10 + nptr[i] - '0';
 		i++;
 	}
-	res = outlier_check(res, sign);
-	return (res);
+	return (outlier_check(res, sign));
 }

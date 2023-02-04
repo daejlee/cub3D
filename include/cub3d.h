@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/04 17:34:52 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/04 22:02:59 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@
 
 # define ROTATE_SPEED 0.05
 # define MOVE_SPEED 0.1
+
+enum parse_err_code
+{
+	MALLOC_FAIL = 0,
+	CORRUPTED_MAP,
+	CORRUPTED_TEXTURE,
+	NOT_ENOUGH_ELEM,
+	INVALID_ELEM,
+	INVAILD_RGB_VAL,
+};
 
 enum wall_dir
 {
@@ -116,7 +126,8 @@ void	move(t_info *info, double dir_x, double dir_y);
  */
 void	free_arr(char **arr);
 void	*set_image(t_info *info, t_img *image, char *filename);
-void	parse_err(char *err_message);
+int		is_invaild_rgb_val(int rgb_val[3]);
+void	parse_err(int err_code);
 int		is_cardinal_texture(char *gnl_buf);
 int		is_floor_ceiling_color(char *gnl_buf);
 

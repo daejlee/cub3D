@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/04 22:02:59 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 16:58:25 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ enum parse_err_code
 	NOT_ENOUGH_ELEM,
 	INVALID_ELEM,
 	INVAILD_RGB_VAL,
+	MAP_NOT_SURROUNDED_WITH_WALL
 };
 
 enum wall_dir
@@ -92,6 +93,8 @@ typedef struct s_info
 	t_img		screen;
 	t_img		wall[4];
 	char		**map;
+	int			width;
+	int			height;
 	int			floor;
 	int			ceil;
 }	t_info;
@@ -120,15 +123,23 @@ void	move(t_info *info, double dir_x, double dir_y);
 /**
  * parse.c
  */
+char	**parse(t_info *info, char *map_name);
 
 /**
- * parse_utils.c
+ * parse_utils_1.c
  */
 void	free_arr(char **arr);
 void	*set_image(t_info *info, t_img *image, char *filename);
 int		is_invaild_rgb_val(int rgb_val[3]);
 void	parse_err(int err_code);
 int		is_cardinal_texture(char *gnl_buf);
+
+/**
+ * parse_utils_2.c
+ */
 int		is_floor_ceiling_color(char *gnl_buf);
+int		get_rgb_val(int rgb_val[3]);
+void	get_map_slots(t_info *info, char *gnl_buf, int map_fd);
+int		is_map(char *gnl_buf);
 
 #endif

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
+/*   Updated: 2023/02/07 16:55:33 by daejlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 #include "get_next_line.h"
 #include <fcntl.h>
 
-void	get_cardinal_texture(t_info *info, char *gnl_buf)
+void	get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr)
 {
 	int		code;
 	char	**temp_arr;
@@ -15,19 +27,10 @@ void	get_cardinal_texture(t_info *info, char *gnl_buf)
 	if (!set_image(info, info->wall + code, temp_arr[1]))
 		parse_err(CORRUPTED_TEXTURE);
 	free_arr(temp_arr);
+	*task_cnt_adr--;
 }
 
-int	get_rgb_val(int rgb_val[3])
-{
-	int	res;
-
-	res = rgb_val[2];
-	res += (rgb_val[1] * 16 * 16);
-	res += (rgb_val[0] * 16 * 16 * 16 * 16);
-	return (res);
-}
-
-void	get_floor_ceiling_color(t_info *info, char *gnl_buf)
+void	get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr)
 {
 	int		code;
 	char	**temp;
@@ -50,47 +53,14 @@ void	get_floor_ceiling_color(t_info *info, char *gnl_buf)
 		info->ceil = get_rgb_val(rgb_val);
 	free_arr(temp);
 	free_arr(color_arr);
+	*task_cnt_adr--;
 }
 
-void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
+void	get_info_until_map(int map_fd, t_info *info)
 {
-	int	width;
-	int	height;
-	int	i;
-
-	width = ft_strlen(gnl_buf);
-	height = 1;
-	while (1)
-	{
-		free(gnl_buf);
-		gnl_buf = get_next_line(map_fd);
-		if (!gnl_buf)
-			break ;
-		if (ft_strlen(gnl_buf) > width)
-			width = ft_strlen(gnl_buf);
-		height++;
-	}
-	info->map = (char **)malloc(sizeof(char *) * width);
-	if (!info->map)
-		parse_err(MALLOC_FAIL);
-	i = 0;
-	while (i < width)
-	{
-		info->map[i++] = (char *)malloc(sizeof(char) * height);
-		if (!info->map[i - 1])
-			parse_err(MALLOC_FAIL);
-	}
-}
-
-char	**parse(t_info *info, char *map_name)
-{
-	int		map_fd;
 	char	*gnl_buf;
 	int		task_cnt;
 
-	map_fd = open(map_name, O_RDONLY);
-	if (map_fd == -1)
-		parse_err(CORRUPTED_MAP);
 	gnl_buf = NULL;
 	task_cnt = 6;
 	while (1)
@@ -99,16 +69,10 @@ char	**parse(t_info *info, char *map_name)
 		if (!gnl_buf)
 			parse_err(NOT_ENOUGH_ELEM);
 		else if (is_cardinal_texture(gnl_buf))
-		{
-			task_cnt--;
-			get_cardinal_texture(info, gnl_buf);
-		}
+			get_cardinal_texture(info, gnl_buf, &task_cnt);
 		else if (is_floor_ceiling_color(gnl_buf))
-		{
-			task_cnt--;
-			get_floor_ceiling_color(info, gnl_buf);
-		}
-		else if (is_map(gnl_buf))
+			get_floor_ceiling_color(info, gnl_buf, &task_cnt);
+		else if (!is_map(gnl_buf))
 		{
 			if (task_cnt)
 				parse_err(NOT_ENOUGH_ELEM);
@@ -119,4 +83,73 @@ char	**parse(t_info *info, char *map_name)
 			parse_err(INVALID_ELEM);
 		free(gnl_buf);
 	}
+}
+
+int		set_spawning_point(char c, t_info *info, int x, int y)
+{
+	info->pos.x = x + 0.5;
+	info->pos.y = y + 0.5;
+	info->plane.x = 0;
+	info->plane.y = 0.66;
+	if (c == 'N')
+	{
+		info->dir.x = -1;
+		info->dir.y = 0;
+	}
+	else if (c == 'S')
+	{
+		info->dir.x = 1;
+		info->dir.y = 0;
+	}
+	else if (c == 'W')
+	{
+		info->dir.x = 0;
+		info->dir.y = -1;
+	}
+	info->dir.x = 0;
+	info->dir.y = 1;
+	return (0);
+}
+
+void	get_map(int map_fd, t_info *info)
+{
+	char	*gnl_buf;
+	int		i;
+	int		k;
+	char	c;
+
+	gnl_buf = get_next_line(map_fd);
+	while (is_map(gnl_buf))
+	{
+		free(gnl_buf);
+		get_next_line(map_fd);
+	}
+	i = 0;
+	while (i < info->height)
+	{
+		k = 0;
+		while (k < info->width)
+		{
+			c = gnl_buf[k];
+			if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
+				info->map[k++][i] = set_spawining_point(c, info, k, i);
+			else
+				info->map[k++][i] = c;
+		}
+		i++;
+	}
+}
+
+char	**parse(t_info *info, char *map_name)
+{
+	int		map_fd;
+
+	map_fd = open(map_name, O_RDONLY);
+	if (map_fd == -1)
+		parse_err(CORRUPTED_MAP);
+	get_info_until_map(map_fd, info);
+	close(map_fd);
+	map_fd = open(map_name, O_RDONLY);
+	get_map(map_fd, info);
+	//examine_map(info);
 }

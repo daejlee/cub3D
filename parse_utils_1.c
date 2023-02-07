@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils_1.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
+/*   Updated: 2023/02/07 16:00:39 by daejlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 #include "get_next_line.h"
@@ -63,16 +75,6 @@ int		is_cardinal_texture(char *gnl_buf)
 		return (3);
 	else if (!ft_strncmp(gnl_buf, "EA ", 3))
 		return (4);
-	else
-		return (0);
-}
-
-int		is_floor_ceiling_color(char *gnl_buf)
-{
-	if (!ft_strncmp(gnl_buf, "F ", 2))
-		return (1);
-	else if (!ft_strncmp(gnl_buf, "C ", 2))
-		return (2);
 	else
 		return (0);
 }

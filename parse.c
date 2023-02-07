@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 17:06:24 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 21:54:09 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@ void	get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr)
 	char	**temp_arr;
 
 	code = is_cardinal_texture(gnl_buf) - 1;
+	if (info->wall[code].ptr) //ptr는 NULL로 초기화 되어 있어야 한다.
+		parse_err(DUPLICATED_ELEM);
 	temp_arr = ft_split(gnl_buf, ' ');
 	if (!temp_arr)
 		parse_err(MALLOC_FAIL);
+	if (!temp_arr[1] || temp_arr[2])
+		parse_err(INVALID_ELEM);
 	if (!set_image(info, info->wall + code, temp_arr[1]))
 		parse_err(CORRUPTED_TEXTURE);
 	free_arr(temp_arr);
@@ -33,25 +37,39 @@ void	get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr)
 void	get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr)
 {
 	int		code;
-	char	**temp;
+	char	**temp_arr;
 	char	**color_arr;
 	int		rgb_val[3];
 
 	code = is_floor_ceiling_color(gnl_buf);
-	temp = ft_split(gnl_buf, ' ');
-	color_arr = ft_split(temp[1], ',');
-	if (!temp || !color_arr)
+	temp_arr = ft_split(gnl_buf, ' ');
+	if (!temp_arr)
 		parse_err(MALLOC_FAIL);
+	else if (!temp_arr[1] || temp_arr[2])
+		parse_err(INVALID_ELEM);
+	color_arr = ft_split(temp_arr[1], ',');
+	if (!color_arr)
+		parse_err(MALLOC_FAIL);
+	else if (!color_arr[2] || color_arr[3])
+		parse_err(INVALID_ELEM);
 	rgb_val[0] = ft_atoi(color_arr[0]);
 	rgb_val[1] = ft_atoi(color_arr[1]);
 	rgb_val[2] = ft_atoi(color_arr[2]);
 	if (!is_invalid_rgb_val(rgb_val))
 		parse_err(INVAILD_RGB_VAL);
 	if (code == 1)
+	{
+		if (info->floor == -1)
+			parse_err(DUPLICATED_ELEM);
 		info->floor = get_rgb_val(rgb_val);
+	}
 	else
+	{
+		if (info->ceil == -1)
+			parse_err(DUPLICATED_ELEM);
 		info->ceil = get_rgb_val(rgb_val);
-	free_arr(temp);
+	}
+	free_arr(temp_arr);
 	free_arr(color_arr);
 	(*task_cnt_adr)--;
 }
@@ -61,14 +79,15 @@ void	get_info_until_map(int map_fd, t_info *info)
 	char	*gnl_buf;
 	int		task_cnt;
 
-	gnl_buf = NULL;
 	task_cnt = 6;
 	while (1)
 	{
 		gnl_buf = get_next_line(map_fd);
 		if (!gnl_buf)
 			parse_err(NOT_ENOUGH_ELEM);
-		else if (is_cardinal_texture(gnl_buf))
+		if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
+			gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
+		if (is_cardinal_texture(gnl_buf))
 			get_cardinal_texture(info, gnl_buf, &task_cnt);
 		else if (is_floor_ceiling_color(gnl_buf))
 			get_floor_ceiling_color(info, gnl_buf, &task_cnt);
@@ -106,8 +125,9 @@ int		set_spawning_point(char c, t_info *info, int x, int y)
 		info->dir.x = 0;
 		info->dir.y = -1;
 	}
-	info->dir.x = 0;
-	info->dir.y = 1;
+	else
+		info->dir.x = 0;
+		info->dir.y = 1;
 	return (0);
 }
 
@@ -119,14 +139,22 @@ void	get_map(int map_fd, t_info *info)
 	char	c;
 
 	gnl_buf = get_next_line(map_fd);
+	if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
+		gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
 	while (is_map(gnl_buf))
 	{
 		free(gnl_buf);
-		get_next_line(map_fd);
+		gnl_buf = get_next_line(map_fd);
+		if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
+			gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
 	}
 	i = 0;
 	while (i < info->height)
 	{
+		if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
+			gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
+		if (is_map(gnl_buf))
+			parse_err(INVALID_ELEM);
 		k = 0;
 		while (k < info->width)
 		{
@@ -137,6 +165,8 @@ void	get_map(int map_fd, t_info *info)
 				info->map[k][i] = c;
 			k++;
 		}
+		free(gnl_buf);
+		gnl_buf = get_next_line(map_fd);
 		i++;
 	}
 }

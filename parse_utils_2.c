@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 17:08:55 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 20:56:55 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int		is_map(char *gnl_buf)
 	while (gnl_buf[i])
 	{
 		c = gnl_buf[i++];
-		if (c != '0' || c != '1' || c != ' ')
+		if (c != '0' && c != '1' && c != ' ' && c != 'N' && c != 'S' && c != 'W' && c != 'E')
 			return (1);
 	}
 	return (0);

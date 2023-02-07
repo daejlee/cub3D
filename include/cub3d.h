@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/07 17:06:34 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 21:53:17 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ enum parse_err_code
 	CORRUPTED_MAP,
 	CORRUPTED_TEXTURE,
 	NOT_ENOUGH_ELEM,
+	DUPLICATED_ELEM,
 	INVALID_ELEM,
 	INVAILD_RGB_VAL,
-	MAP_NOT_SURROUNDED_WITH_WALL
+	MAP_NOT_SURROUNDED_BY_WALL
 };
 
 enum wall_dir
@@ -95,8 +96,8 @@ typedef struct s_info
 	char		**map;
 	int			width;
 	int			height;
-	int			floor;
-	int			ceil;
+	int			floor; // -1로 초기화 되어야 함
+	int			ceil; // "
 }	t_info;
 
 typedef struct s_line_info

@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/07 17:00:42 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 20:24:54 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ int main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		write(2, "too many arg.", 14);
+		write(2, "too many/less arg.", 19);
 		return (1);
 	}
 	info = (t_info *)malloc(sizeof(t_info));

@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 17:08:14 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 21:52:18 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void	*set_image(t_info *info, t_img *image, char *filename)
 	int	height;
 
 	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
+	if (!image->ptr)
+		return (NULL);
 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
-	if (!image->ptr || !image->data)
+	if (!image->data)
 		return (NULL);
 	return (image->ptr);
 }
 
-int		is_invaild_rgb_val(int rgb_val[3])
+int		is_invalid_rgb_val(int rgb_val[3])
 {
 	if (rgb_val[0] < 0 || rgb_val[0] > 255)
 		return (0);
@@ -59,10 +61,14 @@ void	parse_err(int err_code)
 		write(2, "corrupted texture file.", 24);
 	else if (err_code == NOT_ENOUGH_ELEM)
 		write(2, "not enough map elements.", 25);
+	else if (err_code == DUPLICATED_ELEM)
+		write(2, "duplicated element detected.", 29);
 	else if (err_code == INVALID_ELEM)
-		write(2, "invalid element detedted.", 26);
+		write(2, "invalid element detected.", 26);
 	else if (err_code == INVAILD_RGB_VAL)
 		write(2, "invalid floor/ceiling color val.", 33);
+	else
+		write(2, "map is not surrounded by wall.", 33);
 	exit(1);
 }
 

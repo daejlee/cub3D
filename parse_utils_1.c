@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 16:00:39 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 17:08:14 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	*set_image(t_info *info, t_img *image, char *filename)
 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
 	if (!image->ptr || !image->data)
 		return (NULL);
+	return (image->ptr);
 }
 
 int		is_invaild_rgb_val(int rgb_val[3])

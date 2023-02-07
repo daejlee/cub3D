@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/07 16:58:25 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 17:06:34 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,14 @@ void	move(t_info *info, double dir_x, double dir_y);
 /**
  * parse.c
  */
-char	**parse(t_info *info, char *map_name);
+void	parse(t_info *info, char *map_name);
 
 /**
  * parse_utils_1.c
  */
 void	free_arr(char **arr);
 void	*set_image(t_info *info, t_img *image, char *filename);
-int		is_invaild_rgb_val(int rgb_val[3]);
+int		is_invalid_rgb_val(int rgb_val[3]);
 void	parse_err(int err_code);
 int		is_cardinal_texture(char *gnl_buf);
 

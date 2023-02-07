@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 16:04:37 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 17:08:55 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
 		gnl_buf = get_next_line(map_fd);
 		if (!gnl_buf)
 			break ;
-		if (ft_strlen(gnl_buf) > info->width)
+		if (ft_strlen(gnl_buf) > (size_t)info->width)
 			info->width = ft_strlen(gnl_buf);
 		info->height++;
 	}

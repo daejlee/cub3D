@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 16:55:33 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/07 17:06:24 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr)
 	if (!set_image(info, info->wall + code, temp_arr[1]))
 		parse_err(CORRUPTED_TEXTURE);
 	free_arr(temp_arr);
-	*task_cnt_adr--;
+	(*task_cnt_adr)--;
 }
 
 void	get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr)
@@ -53,7 +53,7 @@ void	get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr)
 		info->ceil = get_rgb_val(rgb_val);
 	free_arr(temp);
 	free_arr(color_arr);
-	*task_cnt_adr--;
+	(*task_cnt_adr)--;
 }
 
 void	get_info_until_map(int map_fd, t_info *info)
@@ -132,15 +132,16 @@ void	get_map(int map_fd, t_info *info)
 		{
 			c = gnl_buf[k];
 			if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
-				info->map[k++][i] = set_spawining_point(c, info, k, i);
+				info->map[k][i] = set_spawning_point(c, info, k, i);
 			else
-				info->map[k++][i] = c;
+				info->map[k][i] = c;
+			k++;
 		}
 		i++;
 	}
 }
 
-char	**parse(t_info *info, char *map_name)
+void	parse(t_info *info, char *map_name)
 {
 	int		map_fd;
 

@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 14:48:10 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 16:45:41 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,47 +100,98 @@ typedef struct s_info
 	int			ceil; // "
 }	t_info;
 
+typedef struct s_wall_info
+{
+	double			dist;
+	int				height;
+	int				start;
+	int				end;
+	double			tex_step;
+	enum wall_dir	dir;
+	t_ivector		tex;
+}	t_wall_info;
+
 typedef struct s_line_info
 {
-	double		x;
-	double		height;
+	int			x;
 	t_dvector	ray;
 	t_dvector	delta;
 	t_ivector	ray_pos;
 	t_dvector	ray_len;
+	t_wall_info	wall;
 	t_info		*info;
 }	t_line_info;
 
 extern const char worldMap[MAP_WIDTH][MAP_HEIGHT];
 
 /**
+ * draw.c
+ */
+
+int				draw_map(t_info *info);
+void			draw_default_screen(t_info *info);
+int				draw_line(int side, t_line_info *line);
+int				draw_wall(t_line_info *line, int side);
+
+/**
+ * draw_utils.c
+ */
+
+int				get_texture_x(t_line_info *line, int side);
+enum wall_dir	get_wall_dir(t_line_info *line, int side);
+int				get_wall_start(t_line_info *line);
+int				get_wall_end(t_line_info *line);
+
+/**
+ * check_wall.c
+ */
+
+int				dda_algorithm(t_line_info *line);
+int				step_dir(double ray);
+
+/**
+ * pixel.c
+ */
+
+void			set_pixel(t_img image, int x, int y, unsigned int color);
+unsigned int	get_pixel(t_img image, int x, int y);
+
+/**
+ * init.c
+ */
+
+t_line_info		*set_line_info(t_info *info, int x_pixel);
+void			init_info(t_info *info);
+
+
+/**
  * control.c
  */
-int		on_keydown(int keycode, t_info *info);
-int		on_destroy(void);
-void	rotate(t_info *info, int dir);
-void	move(t_info *info, double dir_x, double dir_y);
+int				on_keydown(int keycode, t_info *info);
+int				on_destroy(void);
+void			rotate(t_info *info, int dir);
+void			move(t_info *info, double dir_x, double dir_y);
 
 /**
  * parse.c
  */
-void	parse(t_info *info, char *map_name);
+void			parse(t_info *info, char *map_name);
 
 /**
  * parse_utils_1.c
  */
-void	free_arr(char **arr);
-void	*set_image(t_info *info, t_img *image, char *filename);
-int		is_invalid_rgb_val(int rgb_val[3]);
-void	parse_err(int err_code);
-int		is_cardinal_texture(char *gnl_buf);
+void			free_arr(char **arr);
+void			*set_image(t_info *info, t_img *image, char *filename);
+int				is_invalid_rgb_val(int rgb_val[3]);
+void			parse_err(int err_code);
+int				is_cardinal_texture(char *gnl_buf);
 
 /**
  * parse_utils_2.c
  */
-int		is_floor_ceiling_color(char *gnl_buf);
-int		get_rgb_val(int rgb_val[3]);
-void	get_map_slots(t_info *info, char *gnl_buf, int map_fd);
-int		is_map(char *gnl_buf);
+int				is_floor_ceiling_color(char *gnl_buf);
+int				get_rgb_val(int rgb_val[3]);
+void			get_map_slots(t_info *info, char *gnl_buf, int map_fd);
+int				is_map(char *gnl_buf);
 
 #endif

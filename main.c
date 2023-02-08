@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/03 22:13:03 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 15:06:54 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	dda_algorithm(t_line_info *line)
 			line->ray_pos.y += step_dir(line->ray.y);
 			side = 1;
 		}
-		if (worldMap[line->ray_pos.x][line->ray_pos.y] == '1')
+		if (line->info->map[line->ray_pos.x][line->ray_pos.y] == '1')
 			hit_wall = 1;
 	}
 	return (side);
@@ -190,31 +190,31 @@ int	get_wall_end(int wall_height)
 	return (end);
 }
 
-int	draw_wall(t_info *info, int wall_height, int texture_x, enum wall_dir wall_dir)
-{
-	t_ivector		pixel;
-	double			accurate_tex_y;
-	double			texture_step;
-	unsigned int	color;
-	int				texture_y;
+// int	draw_wall(t_info *info, int wall_height, int texture_x, enum wall_dir wall_dir)
+// {
+// 	t_ivector		pixel;
+// 	double			accurate_tex_y;
+// 	double			texture_step;
+// 	unsigned int	color;
+// 	int				texture_y;
 
-	texture_step = (double)TEXTURE_SIZE / wall_height;
-	accurate_tex_y = 0;
-	if (SCREEN_HEIGHT / 2 - wall_height / 2 < 0)
-		accurate_tex_y = (-SCREEN_HEIGHT / 2 + wall_height / 2) * texture_step;
-	pixel.y = get_wall_start(wall_height);
-	while (pixel.y <= get_wall_end(wall_height))
-	{
-		texture_y = (int)accurate_tex_y;
-		if (texture_y >= TEXTURE_SIZE)
-			texture_y -= TEXTURE_SIZE;
-		accurate_tex_y += texture_step;
-		color = get_pixel(info->wall[wall_dir], texture_y, texture_x);
-		if(side == 1) color = (color >> 1) & 8355711;
-		set_pixel(info->screen, pixel.y, pixel.x, color);
-		pixel.y++;
-	}
-}
+// 	texture_step = (double)TEXTURE_SIZE / wall_height;
+// 	accurate_tex_y = 0;
+// 	if (SCREEN_HEIGHT / 2 - wall_height / 2 < 0)
+// 		accurate_tex_y = (-SCREEN_HEIGHT / 2 + wall_height / 2) * texture_step;
+// 	pixel.y = get_wall_start(wall_height);
+// 	while (pixel.y <= get_wall_end(wall_height))
+// 	{
+// 		texture_y = (int)accurate_tex_y;
+// 		if (texture_y >= TEXTURE_SIZE)
+// 			texture_y -= TEXTURE_SIZE;
+// 		accurate_tex_y += texture_step;
+// 		color = get_pixel(info->wall[wall_dir], texture_y, texture_x);
+// 		if(side == 1) color = (color >> 1) & 8355711;
+// 		set_pixel(info->screen, pixel.y, pixel.x, color);
+// 		pixel.y++;
+// 	}
+// }
 
 int	draw_line(int side, int x_pixel, t_line_info *line)
 {
@@ -230,6 +230,8 @@ int	draw_line(int side, int x_pixel, t_line_info *line)
 	else
 		wall_dist = (line->ray_len.y - line->delta.y);
 	wall_height = (int)(SCREEN_HEIGHT / wall_dist);
+	if (wall_height < 0)
+		wall_height = 2147483647;
 	wall_dir = get_wall_dir(line, side);
 	texX = get_texture_x(line, side, wall_dist);
 	double step = 1.0 * TEXTURE_SIZE / wall_height;
@@ -274,34 +276,53 @@ int	draw_map(t_info *info)
 	return (0);
 }
 
-void	set_image(t_info *info, t_img *image, char *filename)
+void	init_info(t_info *info)
 {
-	int	width;
-	int	height;
-
-	//todo: file 존재/형식 올바른지 확인
-	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
-	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
+	info->ceil = -1;
+	info->floor = -1;
+	info->dir.x = 0;
+	info->dir.y = 0;
+	info->map = NULL;
+	info->mlx.ptr = NULL;
+	info->mlx.win_ptr = NULL;
+	info->plane.x = 0;
+	info->plane.y = 0;
+	info->pos.x = 0;
+	info->pos.y = 0;
+	info->screen.ptr = NULL;
+	info->wall[0].ptr = NULL;
+	info->wall[1].ptr = NULL;
+	info->wall[2].ptr = NULL;
+	info->wall[3].ptr = NULL;
+	info->width = 0;
+	info->height = 0;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	void	*mlx;
 	void	*mlx_win;
 	t_info	*info;
 
+	if (argc != 2)
+	{
+		write(2, "too many/less arg.", 19);
+		return (1);
+	}
 	info = (t_info *)malloc(sizeof(t_info));
-	/* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
-	info->pos.x = 12.5;
-	info->pos.y = 12.5;
-	/* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
-	info->dir.x = -1;
-	info->dir.y = 0;
-	/* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
-	info->plane.x = 0;
-	info->plane.y = 0.66;
-	info->ceil = 0x0099CCFF;
-	info->floor = 0x00808080;
+	init_info(info);
+	// /* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
+	// info->pos.x = 12.5;
+	// info->pos.y = 12.5;
+	// /* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
+	// info->dir.x = -1;
+	// info->dir.y = 0;
+	// /* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
+	// info->plane.x = 0;
+	// info->plane.y = 0.66;
+	// info->ceil = 0x0099CCFF;
+	// info->floor = 0x00808080;
+
 
 	/* mlx 초기화 및 hook */
 	mlx = mlx_init();
@@ -309,10 +330,11 @@ int main(void)
 	info->mlx.ptr = mlx;
 	info->mlx.win_ptr = mlx_win;
 	info->screen.ptr = NULL;
-	set_image(info, info->wall + NORTH, "source/new1.xpm");
-	set_image(info, info->wall + SOUTH, "source/new2.xpm");
-	set_image(info, info->wall + EAST, "source/new3.xpm");
-	set_image(info, info->wall + WEST, "source/new4.xpm");
+	parse(info, argv[1]);
+	// set_image(info, info->wall + NORTH, "source/new1.xpm");
+	// set_image(info, info->wall + SOUTH, "source/new2.xpm");
+	// set_image(info, info->wall + EAST, "source/new3.xpm");
+	// set_image(info, info->wall + WEST, "source/new4.xpm");
 	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
 	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
 	mlx_loop_hook(mlx, draw_map, info);

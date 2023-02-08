@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:08:56 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/02 17:42:31 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 14:57:12 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,9 @@ void	move(t_info *info, double dir_x, double dir_y)
 		next_pos.x = info->pos.x + info->dir.y * MOVE_SPEED * dir_x;
 		next_pos.y = info->pos.y + info->dir.x * MOVE_SPEED * dir_y;
 	}
-	if (worldMap[(int)next_pos.x][(int)next_pos.y] == '0')
+	if (info->map[(int)next_pos.x][(int)next_pos.y] == '0')
 	{
+	printf("%lf %lf %d %d\n", next_pos.x, next_pos.y, (int)next_pos.x, (int)next_pos.y);
 		info->pos.x = next_pos.x;
 		info->pos.y = next_pos.y;
 	}

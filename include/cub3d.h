@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/03 20:51:35 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 14:48:10 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,19 @@
 # define ON_DESTROY_EVENT 17
 
 # define ROTATE_SPEED 0.05
-# define MOVE_SPEED 0.1
+# define MOVE_SPEED 0.05
+
+enum parse_err_code
+{
+	MALLOC_FAIL = 0,
+	CORRUPTED_MAP,
+	CORRUPTED_TEXTURE,
+	NOT_ENOUGH_ELEM,
+	DUPLICATED_ELEM,
+	INVALID_ELEM,
+	INVAILD_RGB_VAL,
+	MAP_NOT_SURROUNDED_BY_WALL
+};
 
 enum wall_dir
 {
@@ -82,8 +94,10 @@ typedef struct s_info
 	t_img		screen;
 	t_img		wall[4];
 	char		**map;
-	int			floor;
-	int			ceil;
+	int			width;
+	int			height;
+	int			floor; // -1로 초기화 되어야 함
+	int			ceil; // "
 }	t_info;
 
 typedef struct s_line_info
@@ -106,5 +120,27 @@ int		on_keydown(int keycode, t_info *info);
 int		on_destroy(void);
 void	rotate(t_info *info, int dir);
 void	move(t_info *info, double dir_x, double dir_y);
+
+/**
+ * parse.c
+ */
+void	parse(t_info *info, char *map_name);
+
+/**
+ * parse_utils_1.c
+ */
+void	free_arr(char **arr);
+void	*set_image(t_info *info, t_img *image, char *filename);
+int		is_invalid_rgb_val(int rgb_val[3]);
+void	parse_err(int err_code);
+int		is_cardinal_texture(char *gnl_buf);
+
+/**
+ * parse_utils_2.c
+ */
+int		is_floor_ceiling_color(char *gnl_buf);
+int		get_rgb_val(int rgb_val[3]);
+void	get_map_slots(t_info *info, char *gnl_buf, int map_fd);
+int		is_map(char *gnl_buf);
 
 #endif

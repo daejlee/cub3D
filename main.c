@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:44:55 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 16:51:32 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int	main(int argc, char **argv)
 		write(2, "too many/less arg.", 19);
 		return (1);
 	}
-	info = (t_info *)malloc(sizeof(t_info));
-	init_info(info);
+	info = init_info();
 	// info->ceil = 0x0099CCFF;
 	// info->floor = 0x00808080;
 	/* mlx 초기화 및 hook */

@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:47:52 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 16:51:48 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ unsigned int	get_pixel(t_img image, int x, int y);
  */
 
 t_line_info		*set_line_info(t_info *info, int x_pixel);
-void			init_info(t_info *info);
+t_info			*init_info(void);
 
 
 /**

@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:44:39 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:45:02 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 16:51:20 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,13 @@ t_line_info	*set_line_info(t_info *info, int x_pixel)
 	return (line);
 }
 
-void	init_info(t_info *info)
+t_info	*init_info(void)
 {
+	t_info	*info;
+
+	info = (t_info *)malloc(sizeof(t_info));
+	if (!info)
+		return (NULL);
 	info->ceil = -1;
 	info->floor = -1;
 	info->dir.x = 0;
@@ -60,4 +65,5 @@ void	init_info(t_info *info)
 	info->wall[3].ptr = NULL;
 	info->width = 0;
 	info->height = 0;
+	return (info);
 }

@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/07 20:24:54 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 10:10:07 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,15 +218,27 @@ int	draw_map(t_info *info)
 	return (0);
 }
 
-// void	set_image(t_info *info, t_img *image, char *filename)
-// {
-// 	int	width;
-// 	int	height;
-
-// 	//todo: file 존재/형식 올바른지 확인
-// 	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
-// 	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
-// }
+void	init_info(t_info *info)
+{
+	info->ceil = -1;
+	info->floor = -1;
+	info->dir.x = 0;
+	info->dir.y = 0;
+	info->map = NULL;
+	info->mlx.ptr = NULL;
+	info->mlx.win_ptr = NULL;
+	info->plane.x = 0;
+	info->plane.y = 0;
+	info->pos.x = 0;
+	info->pos.y = 0;
+	info->screen.ptr = NULL;
+	info->wall[0].ptr = NULL;
+	info->wall[1].ptr = NULL;
+	info->wall[2].ptr = NULL;
+	info->wall[3].ptr = NULL;
+	info->width = 0;
+	info->height = 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -240,17 +252,18 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	info = (t_info *)malloc(sizeof(t_info));
-	/* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
-	info->pos.x = 12.5;
-	info->pos.y = 12.5;
-	/* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
-	info->dir.x = -1;
-	info->dir.y = 0;
-	/* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
-	info->plane.x = 0;
-	info->plane.y = 0.66;
-	info->ceil = 0x0099CCFF;
-	info->floor = 0x00808080;
+	init_info(info);
+	// /* 플레이어 위치. 맵에서 읽어서 저장해야 함 */
+	// info->pos.x = 12.5;
+	// info->pos.y = 12.5;
+	// /* 플레이어 방향. 역시 맵에서 읽어서 저장해야 함 */
+	// info->dir.x = -1;
+	// info->dir.y = 0;
+	// /* 카메라 평면 벡터. 플레이어 방향에 맞춰 변해야 함 */
+	// info->plane.x = 0;
+	// info->plane.y = 0.66;
+	// info->ceil = 0x0099CCFF;
+	// info->floor = 0x00808080;
 
 
 	/* mlx 초기화 및 hook */

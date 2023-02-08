@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 21:54:09 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 10:14:29 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void	get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr)
 		parse_err(INVAILD_RGB_VAL);
 	if (code == 1)
 	{
-		if (info->floor == -1)
+		if (info->floor != -1)
 			parse_err(DUPLICATED_ELEM);
 		info->floor = get_rgb_val(rgb_val);
 	}
 	else
 	{
-		if (info->ceil == -1)
+		if (info->ceil != -1)
 			parse_err(DUPLICATED_ELEM);
 		info->ceil = get_rgb_val(rgb_val);
 	}

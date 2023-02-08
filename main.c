@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:51:32 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 17:12:32 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ const char worldMap[MAP_WIDTH][MAP_HEIGHT]=
 
 int	main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*mlx_win;
 	t_info	*info;
 
 	if (argc != 2)
@@ -55,15 +53,14 @@ int	main(int argc, char **argv)
 	// info->ceil = 0x0099CCFF;
 	// info->floor = 0x00808080;
 	/* mlx 초기화 및 hook */
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
-	info->mlx.ptr = mlx;
-	info->mlx.win_ptr = mlx_win;
+	info->mlx.ptr = mlx_init();
+	info->mlx.win_ptr = mlx_new_window(info->mlx.ptr, \
+										SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
 	info->screen.ptr = NULL;
 	parse(info, argv[1]);
-	mlx_hook(mlx_win, ON_DESTROY_EVENT, 0, on_destroy, NULL);
-	mlx_hook(mlx_win, ON_KEYDOWN_EVENT, 0, on_keydown, info);
-	mlx_loop_hook(mlx, draw_map, info);
-	mlx_loop(mlx);
+	mlx_hook(info->mlx.win_ptr, ON_DESTROY_EVENT, 0, on_destroy, NULL);
+	mlx_hook(info->mlx.win_ptr, ON_KEYDOWN_EVENT, 0, on_keydown, info);
+	mlx_loop_hook(info->mlx.ptr, draw_map, info);
+	mlx_loop(info->mlx.ptr);
 	return (0);
 }

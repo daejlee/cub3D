@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 16:08:12 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 17:05:45 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int		is_invalid_rgb_val(int rgb_val[3])
 void	parse_err(int err_code)
 {
 	if (!err_code)
+	{
 		write(2, "FATAL ERROR: MALLOC FAILED.", 28);
+		exit(1);
+	}
 	write(2, "parse error: ", 14);
 	if (err_code == CORRUPTED_MAP)
 		write(2, "corrupted map file.", 20);

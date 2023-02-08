@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 16:07:22 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 16:15:48 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,32 +108,28 @@ int		set_spawning_point(char c, t_info *info, int x, int y)
 {
 	info->pos.x = x + 0.5;
 	info->pos.y = y + 0.5;
+	info->dir.x = 0;
+	info->dir.y = 0;
+	info->plane.x = 0;
+	info->plane.y = 0;
 	if (c == 'N')
 	{
-		info->dir.x = 0;
 		info->dir.y = -1;
 		info->plane.x = -0.66;
-		info->plane.y = 0;
 	}
 	else if (c == 'S')
 	{
-		info->dir.x = 0;
 		info->dir.y = 1;
 		info->plane.x = 0.66;
-		info->plane.y = 0;
 	}
 	else if (c == 'W')
 	{
 		info->dir.x = -1;
-		info->dir.y = 0;
-		info->plane.x = 0;
 		info->plane.y = 0.66;
 	}
 	else
 	{
 		info->dir.x = 1;
-		info->dir.y = 0;
-		info->plane.x = 0;
 		info->plane.y = -0.66;
 	}
 	return ('0');
@@ -180,12 +176,12 @@ void	get_map(int map_fd, t_info *info)
 				info->map[k][i] = c;
 			k++;
 		}
-		if (!spawn_flag)
-			parse_err(INVALID_MAP);
 		free(gnl_buf);
 		gnl_buf = get_next_line(map_fd);
 		i++;
 	}
+	if (!spawn_flag)
+		parse_err(INVALID_MAP);
 }
 
 void	parse(t_info *info, char *map_name)

@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:08:56 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:46:30 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 17:17:54 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,8 @@ void	move(t_info *info, double dir_x, double dir_y)
 		next_pos.x = info->pos.x + info->dir.y * MOVE_SPEED * dir_x;
 		next_pos.y = info->pos.y + info->dir.x * MOVE_SPEED * dir_y;
 	}
-	if (info->map[(int)next_pos.x][(int)next_pos.y] == '0')
-	{
+	if (info->map[(int)next_pos.x][(int)info->pos.y] == '0')
 		info->pos.x = next_pos.x;
+	if (info->map[(int)info->pos.x][(int)next_pos.y] == '0')
 		info->pos.y = next_pos.y;
-	}
 }

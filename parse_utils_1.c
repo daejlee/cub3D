@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 20:39:02 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 22:05:52 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int		is_invalid_rgb_val(int rgb_val[3])
 
 void	parse_err(int err_code)
 {
+	//함수명 error 어쩌구로 바꾸고, Error\n 먼저 출력하기
 	if (!err_code)
 	{
 		write(2, "FATAL ERROR: MALLOC FAILED.", 28);

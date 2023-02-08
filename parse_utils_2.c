@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 20:40:01 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 21:40:12 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
 {
 	int	i;
 
-	info->width = ft_strlen(gnl_buf);
+	info->width = ft_strlen(gnl_buf) - 1;
 	info->height = 1;
 	while (1)
 	{
@@ -47,8 +47,8 @@ void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
 		gnl_buf = get_next_line(map_fd);
 		if (!gnl_buf)
 			break ;
-		if (ft_strlen(gnl_buf) > (size_t)info->width)
-			info->width = ft_strlen(gnl_buf);
+		if (ft_strlen(gnl_buf) - 1 > (size_t)info->width)
+			info->width = ft_strlen(gnl_buf) - 1;
 		info->height++;
 	}
 	info->map = (char **)malloc(sizeof(char *) * info->height);

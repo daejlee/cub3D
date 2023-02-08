@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 19:28:13 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 20:17:20 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 22:02:02 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,62 @@ void	dfs(t_info *info, int x, int y)
 	{
 		node = pop_stack(stack);
 		info->map[node->x][node->y] = '1';
-		if (info->map[node->x + 1][node->y] == ' ')
-			push_stack(stack, init_node(node->x + 1, node->y));
-		else if (info->map[node->x + 1][node->y] == '0')
-			parse_err(INVALID_MAP);
-		if (info->map[node->x][node->y + 1] == ' ')
-			push_stack(stack, init_node(node->x, node->y + 1));
-		else if (info->map[node->x][node->y + 1] == '0')
-			parse_err(INVALID_MAP);
-		if (info->map[node->x + 1][node->y + 1] == ' ')
-			push_stack(stack, init_node(node->x + 1, node->y + 1));
-		else if (info->map[node->x + 1][node->y + 1] == '0')
-			parse_err(INVALID_MAP);
+		if (node->x + 1 < info->height)
+		{
+			if (info->map[node->x + 1][node->y] == ' ')
+				push_stack(stack, init_node(node->x + 1, node->y));
+			else if (info->map[node->x + 1][node->y] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->y + 1 < info->width)
+		{
+			if (info->map[node->x][node->y + 1] == ' ')
+				push_stack(stack, init_node(node->x, node->y + 1));
+			else if (info->map[node->x][node->y + 1] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->x - 1 >= 0)
+		{
+			if (info->map[node->x - 1][node->y] == ' ')
+				push_stack(stack, init_node(node->x + 1, node->y));
+			else if (info->map[node->x - 1][node->y] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->y - 1 >= 0)
+		{
+			if (info->map[node->x][node->y - 1] == ' ')
+				push_stack(stack, init_node(node->x, node->y + 1));
+			else if (info->map[node->x][node->y - 1] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->x + 1 < info->height && node->y + 1 < info->width)
+		{
+			if (info->map[node->x + 1][node->y + 1] == ' ')
+				push_stack(stack, init_node(node->x + 1, node->y + 1));
+			else if (info->map[node->x + 1][node->y + 1] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->x - 1 >= 0 && node->y - 1 >= 0)
+		{
+			if (info->map[node->x - 1][node->y - 1] == ' ')
+				push_stack(stack, init_node(node->x - 1, node->y - 1));
+			else if (info->map[node->x - 1][node->y - 1] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->x - 1 >= 0 && node->y + 1 < info->width)
+		{
+			if (info->map[node->x - 1][node->y + 1] == ' ')
+				push_stack(stack, init_node(node->x - 1, node->y + 1));
+			else if (info->map[node->x - 1][node->y + 1] == '0')
+				parse_err(INVALID_MAP);
+		}
+		if (node->x + 1 < info->height && node->y - 1 >= 0)
+		{
+			if (info->map[node->x + 1][node->y - 1] == ' ')
+				push_stack(stack, init_node(node->x + 1, node->y - 1));
+			else if (info->map[node->x + 1][node->y - 1] == '0')
+				parse_err(INVALID_MAP);
+		}
 	}
 }
 

@@ -6,7 +6,7 @@
 #    By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 15:24:38 by daejlee           #+#    #+#              #
-#    Updated: 2023/02/08 19:58:00 by hkong            ###   ########.fr        #
+#    Updated: 2023/02/08 21:31:32 by hkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ INCLUDE 	= -I./include -I$(MLX_DIR) -I./libft_garage/libft -I./libft_garage/gnl
 LIBRARY 	= -L$(LIBFT_DIR) -lft -lmlx
 
 SRC 		= main.c control.c parse.c parse_utils_1.c parse_utils_2.c draw.c \
-				draw_utils.c check_wall.c pixel.c init.c
+				draw_utils.c check_wall.c pixel.c init.c stack.c
 
 OBJ 		= $(SRC:.c=.o)
 

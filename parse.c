@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 16:15:48 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 17:08:28 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr)
 	char	**temp_arr;
 
 	code = is_cardinal_texture(gnl_buf) - 1;
-	if (info->wall[code].ptr) //ptr는 NULL로 초기화 되어 있어야 한다.
+	if (info->wall_img[code].ptr) //ptr는 NULL로 초기화 되어 있어야 한다.
 		parse_err(DUPLICATED_ELEM);
 	temp_arr = ft_split(gnl_buf, ' ');
 	if (!temp_arr)
 		parse_err(MALLOC_FAIL);
 	if (!temp_arr[1] || temp_arr[2])
 		parse_err(INVALID_ELEM);
-	if (!set_image(info, info->wall + code, temp_arr[1]))
+	if (!set_image(info, info->wall_img + code, temp_arr[1]))
 		parse_err(CORRUPTED_TEXTURE);
 	free_arr(temp_arr);
 	(*task_cnt_adr)--;

@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:16:14 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:26:24 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 17:08:28 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	draw_wall(t_line_info *line, int side)
 		if (line->wall.tex.y >= TEXTURE_SIZE)
 			line->wall.tex.y -= TEXTURE_SIZE;
 		accurate_tex_y += line->wall.tex_step;
-		color = get_pixel(line->info->wall[line->wall.dir], \
+		color = get_pixel(line->info->wall_img[line->wall.dir], \
 									line->wall.tex.y, line->wall.tex.x);
 		if (side == 1)
 			color = (color >> 1) & 8355711;

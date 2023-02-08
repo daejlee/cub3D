@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 16:51:48 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 17:08:32 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef struct s_info
 	t_dvector	dir;
 	t_dvector	plane;
 	t_img		screen;
-	t_img		wall[4];
+	t_img		wall_img[4];
 	char		**map;
 	int			width;
 	int			height;

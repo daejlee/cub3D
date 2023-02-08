@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:44:39 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 17:06:04 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 17:09:08 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_line_info	*set_line_info(t_info *info, int x_pixel)
 
 	line = (t_line_info *)malloc(sizeof(t_line_info));
 	if (!line)
-		prase_err();
+		parse_err(MALLOC_FAIL);
 	x_rate = 2 * x_pixel / (double)SCREEN_WIDTH - 1;
 	line->x = x_pixel;
 	line->ray.x = info->dir.x + info->plane.x * x_rate;
@@ -46,7 +46,7 @@ t_info	*init_info(void)
 
 	info = (t_info *)malloc(sizeof(t_info));
 	if (!info)
-		parse_err();
+		parse_err(MALLOC_FAIL);
 	info->ceil = -1;
 	info->floor = -1;
 	info->dir.x = 0;
@@ -59,10 +59,10 @@ t_info	*init_info(void)
 	info->pos.x = 0;
 	info->pos.y = 0;
 	info->screen.ptr = NULL;
-	info->wall[0].ptr = NULL;
-	info->wall[1].ptr = NULL;
-	info->wall[2].ptr = NULL;
-	info->wall[3].ptr = NULL;
+	info->wall_img[0].ptr = NULL;
+	info->wall_img[1].ptr = NULL;
+	info->wall_img[2].ptr = NULL;
+	info->wall_img[3].ptr = NULL;
 	info->width = 0;
 	info->height = 0;
 	return (info);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 14:50:59 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 15:24:10 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,31 +108,33 @@ int		set_spawning_point(char c, t_info *info, int x, int y)
 {
 	info->pos.x = x + 0.5;
 	info->pos.y = y + 0.5;
-	info->plane.x = 0;
-	info->plane.y = 0.66;
 	if (c == 'N')
 	{
-		info->dir.x = -1;
-		info->dir.y = 0;
-	}
-	else if (c == 'S')
-	{
-		info->dir.x = 1;
-		info->dir.y = 0;
-	}
-	else if (c == 'W')
-	{
-		info->plane.x = 0.66;
-		info->plane.y = 0;
 		info->dir.x = 0;
 		info->dir.y = -1;
+		info->plane.x = -0.66;
+		info->plane.y = 0;
 	}
-	else
+	else if (c == 'S')
 	{
 		info->dir.x = 0;
 		info->dir.y = 1;
 		info->plane.x = 0.66;
 		info->plane.y = 0;
+	}
+	else if (c == 'W')
+	{
+		info->dir.x = -1;
+		info->dir.y = 0;
+		info->plane.x = 0;
+		info->plane.y = 0.66;
+	}
+	else
+	{
+		info->dir.x = 1;
+		info->dir.y = 0;
+		info->plane.x = 0;
+		info->plane.y = -0.66;
 	}
 	return ('0');
 }

@@ -6,24 +6,24 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:44:39 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 17:09:08 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 20:57:11 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_line_info	*set_line_info(t_info *info, int x_pixel)
+t_line_info	*set_line_info(t_info *info, int y_pixel)
 {
 	t_line_info	*line;
-	double		x_rate;
+	double		y_rate;
 
 	line = (t_line_info *)malloc(sizeof(t_line_info));
 	if (!line)
 		parse_err(MALLOC_FAIL);
-	x_rate = 2 * x_pixel / (double)SCREEN_WIDTH - 1;
-	line->x = x_pixel;
-	line->ray.x = info->dir.x + info->plane.x * x_rate;
-	line->ray.y = info->dir.y + info->plane.y * x_rate;
+	y_rate = 2 * y_pixel / (double)SCREEN_WIDTH - 1;
+	line->y = y_pixel;
+	line->ray.x = info->dir.x + info->plane.x * y_rate;
+	line->ray.y = info->dir.y + info->plane.y * y_rate;
 	line->ray_pos.x = (int)info->pos.x;
 	line->ray_pos.y = (int)info->pos.y;
 	line->delta.x = fabs(1 / line->ray.x);

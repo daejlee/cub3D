@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 17:05:45 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 20:39:02 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ int		is_cardinal_texture(char *gnl_buf)
 		return (1);
 	else if (!ft_strncmp(gnl_buf, "SO ", 3))
 		return (2);
-	else if (!ft_strncmp(gnl_buf, "WE ", 3))
-		return (3);
 	else if (!ft_strncmp(gnl_buf, "EA ", 3))
+		return (3);
+	else if (!ft_strncmp(gnl_buf, "WE ", 3))
 		return (4);
 	else
 		return (0);

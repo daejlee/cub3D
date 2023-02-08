@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 20:56:55 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 20:40:01 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
 			info->width = ft_strlen(gnl_buf);
 		info->height++;
 	}
-	info->map = (char **)malloc(sizeof(char *) * info->width);
+	info->map = (char **)malloc(sizeof(char *) * info->height);
 	if (!info->map)
 		parse_err(MALLOC_FAIL);
 	i = 0;
-	while (i < info->width)
+	while (i < info->height)
 	{
-		info->map[i++] = (char *)malloc(sizeof(char) * info->height);
+		info->map[i++] = (char *)malloc(sizeof(char) * info->width);
 		if (!info->map[i - 1])
 			parse_err(MALLOC_FAIL);
 	}

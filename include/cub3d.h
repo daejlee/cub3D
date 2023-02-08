@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 17:08:32 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 21:19:30 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,19 @@ typedef struct s_ivector
 	int	y;
 }	t_ivector;
 
+typedef struct s_node
+{
+	int	x;
+	int	y;
+	struct s_node	*prev;
+}	t_node;
+
+typedef struct s_stack
+{
+	int		size;
+	t_node	*top;
+}	t_stack;
+
 typedef struct s_info
 {
 	t_mlx		mlx;
@@ -113,7 +126,7 @@ typedef struct s_wall_info
 
 typedef struct s_line_info
 {
-	int			x;
+	int			y;
 	t_dvector	ray;
 	t_dvector	delta;
 	t_ivector	ray_pos;
@@ -137,7 +150,7 @@ int				draw_wall(t_line_info *line, int side);
  * draw_utils.c
  */
 
-int				get_texture_x(t_line_info *line, int side);
+int				get_texture_y(t_line_info *line, int side);
 enum wall_dir	get_wall_dir(t_line_info *line, int side);
 int				get_wall_start(t_line_info *line);
 int				get_wall_end(t_line_info *line);
@@ -162,6 +175,9 @@ unsigned int	get_pixel(t_img image, int x, int y);
 
 t_line_info		*set_line_info(t_info *info, int x_pixel);
 t_info			*init_info(void);
+
+
+void	dfs(t_info *info, int x, int y);
 
 
 /**

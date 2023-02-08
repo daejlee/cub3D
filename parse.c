@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 17:08:28 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/08 21:07:29 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,23 +114,23 @@ int		set_spawning_point(char c, t_info *info, int x, int y)
 	info->plane.y = 0;
 	if (c == 'N')
 	{
-		info->dir.y = -1;
-		info->plane.x = -0.66;
-	}
-	else if (c == 'S')
-	{
-		info->dir.y = 1;
-		info->plane.x = 0.66;
-	}
-	else if (c == 'W')
-	{
 		info->dir.x = -1;
 		info->plane.y = 0.66;
 	}
-	else
+	else if (c == 'S')
 	{
 		info->dir.x = 1;
 		info->plane.y = -0.66;
+	}
+	else if (c == 'W')
+	{
+		info->dir.y = -1;
+		info->plane.x = -0.66;
+	}
+	else
+	{
+		info->dir.y = 1;
+		info->plane.x = 0.66;
 	}
 	return ('0');
 }
@@ -169,11 +169,11 @@ void	get_map(int map_fd, t_info *info)
 			{
 				if (spawn_flag)
 					parse_err(INVALID_MAP);
-				info->map[k][i] = set_spawning_point(c, info, k, i);
+				info->map[i][k] = set_spawning_point(c, info, i, k);
 				spawn_flag = 1;
 			}
 			else
-				info->map[k][i] = c;
+				info->map[i][k] = c;
 			k++;
 		}
 		free(gnl_buf);
@@ -183,6 +183,22 @@ void	get_map(int map_fd, t_info *info)
 	if (!spawn_flag)
 		parse_err(INVALID_MAP);
 }
+
+// void	examine_map(t_info *info)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	y = -1;
+// 	while (++y < info->height)
+// 	{
+// 		x = -1;
+// 		while (++x < info->width)
+// 		{
+// 			if (info->map[x][y])
+// 		}
+// 	}
+// }
 
 void	parse(t_info *info, char *map_name)
 {
@@ -195,5 +211,5 @@ void	parse(t_info *info, char *map_name)
 	close(map_fd);
 	map_fd = open(map_name, O_RDONLY);
 	get_map(map_fd, info);
-	//examine_map(info);
+	// examine_map(info);
 }

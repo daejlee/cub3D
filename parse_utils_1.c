@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/07 21:52:18 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 16:08:12 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	parse_err(int err_code)
 	else if (err_code == INVAILD_RGB_VAL)
 		write(2, "invalid floor/ceiling color val.", 33);
 	else
-		write(2, "map is not surrounded by wall.", 33);
+		write(2, "invalid map.", 13);
 	exit(1);
 }
 

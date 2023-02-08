@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 15:24:10 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/08 16:07:22 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ void	get_map(int map_fd, t_info *info)
 	int		i;
 	int		k;
 	char	c;
+	int		spawn_flag;
 
 	gnl_buf = get_next_line(map_fd);
 	if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
@@ -157,6 +158,7 @@ void	get_map(int map_fd, t_info *info)
 			gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
 	}
 	i = 0;
+	spawn_flag = 0;
 	while (i < info->height)
 	{
 		if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
@@ -168,11 +170,18 @@ void	get_map(int map_fd, t_info *info)
 		{
 			c = gnl_buf[k];
 			if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
+			{
+				if (spawn_flag)
+					parse_err(INVALID_MAP);
 				info->map[k][i] = set_spawning_point(c, info, k, i);
+				spawn_flag = 1;
+			}
 			else
 				info->map[k][i] = c;
 			k++;
 		}
+		if (!spawn_flag)
+			parse_err(INVALID_MAP);
 		free(gnl_buf);
 		gnl_buf = get_next_line(map_fd);
 		i++;

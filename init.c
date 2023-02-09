@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:44:39 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 20:57:11 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/09 16:38:32 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_line_info	*set_line_info(t_info *info, int y_pixel)
 
 	line = (t_line_info *)malloc(sizeof(t_line_info));
 	if (!line)
-		parse_err(MALLOC_FAIL);
+		err(MALLOC_FAIL);
 	y_rate = 2 * y_pixel / (double)SCREEN_WIDTH - 1;
 	line->y = y_pixel;
 	line->ray.x = info->dir.x + info->plane.x * y_rate;
@@ -46,7 +46,7 @@ t_info	*init_info(void)
 
 	info = (t_info *)malloc(sizeof(t_info));
 	if (!info)
-		parse_err(MALLOC_FAIL);
+		err(MALLOC_FAIL);
 	info->ceil = -1;
 	info->floor = -1;
 	info->dir.x = 0;

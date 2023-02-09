@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/08 22:05:52 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/09 16:38:56 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,18 @@ void	*set_image(t_info *info, t_img *image, char *filename)
 	int	width;
 	int	height;
 
-	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename, &width, &height);
+	image->ptr = mlx_xpm_file_to_image(info->mlx.ptr, filename,
+			&width, &height);
 	if (!image->ptr)
 		return (NULL);
-	image->data = mlx_get_data_addr(image->ptr, &(image->bpp), &(image->line_size), &(image->endian));
+	image->data = mlx_get_data_addr(image->ptr, &(image->bpp),
+			&(image->line_size), &(image->endian));
 	if (!image->data)
 		return (NULL);
 	return (image->ptr);
 }
 
-int		is_invalid_rgb_val(int rgb_val[3])
+int	is_invalid_rgb_val(int rgb_val[3])
 {
 	if (rgb_val[0] < 0 || rgb_val[0] > 255)
 		return (0);
@@ -50,9 +52,9 @@ int		is_invalid_rgb_val(int rgb_val[3])
 	return (1);
 }
 
-void	parse_err(int err_code)
+void	err(int err_code)
 {
-	//함수명 error 어쩌구로 바꾸고, Error\n 먼저 출력하기
+	write(2, "Error\n", 7);
 	if (!err_code)
 	{
 		write(2, "FATAL ERROR: MALLOC FAILED.", 28);
@@ -76,7 +78,7 @@ void	parse_err(int err_code)
 	exit(1);
 }
 
-int		is_cardinal_texture(char *gnl_buf)
+int	is_cardinal_texture(char *gnl_buf)
 {
 	if (!ft_strncmp(gnl_buf, "NO ", 3))
 		return (1);

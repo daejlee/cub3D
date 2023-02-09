@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 21:19:30 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/09 16:38:32 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define ROTATE_SPEED 0.05
 # define MOVE_SPEED 0.05
 
-enum parse_err_code
+enum err_code
 {
 	MALLOC_FAIL = 0,
 	CORRUPTED_MAP,
@@ -199,7 +199,7 @@ void			parse(t_info *info, char *map_name);
 void			free_arr(char **arr);
 void			*set_image(t_info *info, t_img *image, char *filename);
 int				is_invalid_rgb_val(int rgb_val[3]);
-void			parse_err(int err_code);
+void			err(int err_code);
 int				is_cardinal_texture(char *gnl_buf);
 
 /**

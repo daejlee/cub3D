@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 19:28:13 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 22:02:02 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/09 16:20:48 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ void	dfs(t_info *info, int x, int y)
 		if (node->x - 1 >= 0)
 		{
 			if (info->map[node->x - 1][node->y] == ' ')
-				push_stack(stack, init_node(node->x + 1, node->y));
+				push_stack(stack, init_node(node->x - 1, node->y));
 			else if (info->map[node->x - 1][node->y] == '0')
 				parse_err(INVALID_MAP);
 		}
 		if (node->y - 1 >= 0)
 		{
 			if (info->map[node->x][node->y - 1] == ' ')
-				push_stack(stack, init_node(node->x, node->y + 1));
+				push_stack(stack, init_node(node->x, node->y - 1));
 			else if (info->map[node->x][node->y - 1] == '0')
 				parse_err(INVALID_MAP);
 		}

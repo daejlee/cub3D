@@ -6,10 +6,11 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/19 15:26:54 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/04 17:48:48 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/09 16:34:49 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
 static const char	*blank_check(const char *nptr)
 {

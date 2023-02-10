@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/10 18:38:26 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/10 19:01:39 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include "libft.h"
 # include "get_next_line.h"
 
-# define SCREEN_WIDTH 1000
-# define SCREEN_HEIGHT 600
+# define SCREEN_WIDTH 1680
+# define SCREEN_HEIGHT 1200
 # define MAP_WIDTH 24
 # define MAP_HEIGHT 24
 # define TEXTURE_SIZE 32
@@ -180,13 +180,25 @@ unsigned int	get_pixel(t_img image, int x, int y);
 t_line_info		*set_line_info(t_info *info, int x_pixel);
 t_info			*init_info(void);
 
+/**
+ * stack.c
+ */
 
-void	dfs(t_info *info, int x, int y);
+t_stack			*init_stack(void);
+t_node			*init_node(int x, int y);
+void			push_stack(t_stack *stack, t_node *node);
+t_node			*pop_stack(t_stack *stack);
 
+/**
+ * dfs.c
+ */
+
+void			dfs(t_info *info, int x, int y);
 
 /**
  * control.c
  */
+
 int				on_keydown(int keycode, t_info *info);
 int				on_destroy(void);
 void			rotate(t_info *info, int dir);
@@ -195,11 +207,13 @@ void			move(t_info *info, double dir_x, double dir_y);
 /**
  * parse.c
  */
+
 void			parse(t_info *info, char *map_name);
 
 /**
  * parse_utils_1.c
  */
+
 void			free_arr(char **arr);
 void			*set_image(t_info *info, t_img *image, char *filename);
 int				is_invalid_rgb_val(int rgb_val[3]);
@@ -209,6 +223,7 @@ int				is_cardinal_texture(char *gnl_buf);
 /**
  * parse_utils_2.c
  */
+
 char			*remove_tailing_nl(char *gnl_buf);
 int				is_floor_ceiling_color(char *gnl_buf);
 int				get_rgb_val(int rgb_val[3]);
@@ -218,6 +233,7 @@ int				is_map(char *gnl_buf);
 /**
  * parse_utils_3.c
  */
+
 void			get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr);
 void			get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr);
 void			get_info_until_map(int map_fd, t_info *info);
@@ -225,11 +241,13 @@ void			get_info_until_map(int map_fd, t_info *info);
 /**
  * parse_utils_4.c
  */
+
 void			get_map(int map_fd, t_info *info);
 
 /**
  * parse_utils_5.c
  */
+
 void			examine_map(t_info *info);
 
 #endif

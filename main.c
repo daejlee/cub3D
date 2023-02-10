@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 22:06:17 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/10 18:48:33 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	main(int argc, char **argv)
 {
-	//todo: leak, norminette
 	t_info	*info;
 
 	if (argc != 2)
@@ -23,9 +22,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	info = init_info();
-	// info->ceil = 0x0099CCFF;
-	// info->floor = 0x00808080;
-	/* mlx 초기화 및 hook */
 	info->mlx.ptr = mlx_init();
 	info->mlx.win_ptr = mlx_new_window(info->mlx.ptr, \
 										SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");

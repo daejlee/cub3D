@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/09 16:38:32 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/10 18:38:26 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <math.h>
 # include <stdio.h>
 # include <mlx.h>
+# include <fcntl.h>
+# include "cub3d.h"
+# include "libft.h"
+# include "get_next_line.h"
 
 # define SCREEN_WIDTH 1000
 # define SCREEN_HEIGHT 600
@@ -205,9 +209,27 @@ int				is_cardinal_texture(char *gnl_buf);
 /**
  * parse_utils_2.c
  */
+char			*remove_tailing_nl(char *gnl_buf);
 int				is_floor_ceiling_color(char *gnl_buf);
 int				get_rgb_val(int rgb_val[3]);
 void			get_map_slots(t_info *info, char *gnl_buf, int map_fd);
 int				is_map(char *gnl_buf);
+
+/**
+ * parse_utils_3.c
+ */
+void			get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr);
+void			get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr);
+void			get_info_until_map(int map_fd, t_info *info);
+
+/**
+ * parse_utils_4.c
+ */
+void			get_map(int map_fd, t_info *info);
+
+/**
+ * parse_utils_5.c
+ */
+void			examine_map(t_info *info);
 
 #endif

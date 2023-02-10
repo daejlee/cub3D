@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/09 16:39:31 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/10 18:29:31 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 #include "libft.h"
 #include "get_next_line.h"
 #include <fcntl.h>
+
+char	*remove_tailing_nl(char *gnl_buf)
+{
+	if (ft_strlen(gnl_buf) != 1 && gnl_buf[ft_strlen(gnl_buf) - 1] == '\n')
+		gnl_buf[ft_strlen(gnl_buf) - 1] = 0;
+	return (gnl_buf);
+}
 
 int	is_floor_ceiling_color(char *gnl_buf)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/10 19:01:39 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 13:52:24 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ enum err_code
 	DUPLICATED_ELEM,
 	INVALID_ELEM,
 	INVAILD_RGB_VAL,
-	INVALID_MAP
+	INVALID_MAP,
+	UNEXPECTED,
+	INVALID_ARGUMENT
 };
 
 enum wall_dir

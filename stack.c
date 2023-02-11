@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 19:28:13 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/10 18:50:10 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 14:04:15 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_node	*init_node(int x, int y)
 void	push_stack(t_stack *stack, t_node *node)
 {
 	if (!stack || !node)
-		err(MALLOC_FAIL);
+		err(UNEXPECTED);
 	node->prev = stack->top;
 	stack->top = node;
 	stack->size++;
@@ -50,10 +50,8 @@ t_node	*pop_stack(t_stack *stack)
 {
 	t_node	*node;
 
-	if (!stack)
-		err(MALLOC_FAIL);
-	if (!stack->size)
-		err(MALLOC_FAIL);
+	if (!stack || !stack->size)
+		err(UNEXPECTED);
 	node = stack->top;
 	stack->top = stack->top->prev;
 	stack->size--;

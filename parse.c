@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:32 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/10 18:35:38 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:37:39 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	parse(t_info *info, char *map_name)
 {
-	int		map_fd;
+	int	map_fd;
 
+	check_map_format(map_name);
 	map_fd = open(map_name, O_RDONLY);
 	if (map_fd == -1)
 		err(CORRUPTED_MAP);

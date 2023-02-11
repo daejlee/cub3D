@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/11 14:00:13 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:36:10 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	err(int err_code)
 		write(2, "FATAL ERROR: MALLOC FAILED.\n", 29);
 	else if (err_code == UNEXPECTED)
 		write(2, "FATAL ERROR: UNEXPECTED BEHAVIOR.\n", 35);
+	else if (err_code == INVALID_MAP_FORMAT)
+		write(2, "parse error: invalid map format.\n", 34);
 	else if (err_code == CORRUPTED_MAP)
 		write(2, "parse error: corrupted map file.\n", 34);
 	else if (err_code == CORRUPTED_TEXTURE)

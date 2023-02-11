@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/11 15:15:10 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:40:56 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@
 # define ROTATE_SPEED 0.05
 # define MOVE_SPEED 0.05
 
-enum err_code
+enum e_err_code
 {
 	MALLOC_FAIL = 0,
+	INVALID_MAP_FORMAT,
 	CORRUPTED_MAP,
 	CORRUPTED_TEXTURE,
 	NOT_ENOUGH_ELEM,
@@ -56,7 +57,7 @@ enum err_code
 	INVALID_ARGUMENT
 };
 
-enum wall_dir
+enum e_wall_dir
 {
 	NORTH = 0,
 	SOUTH,
@@ -93,8 +94,8 @@ typedef struct s_ivector
 
 typedef struct s_node
 {
-	int	x;
-	int	y;
+	int				x;
+	int				y;
 	struct s_node	*prev;
 }	t_node;
 
@@ -115,8 +116,8 @@ typedef struct s_info
 	char		**map;
 	int			width;
 	int			height;
-	int			floor; // -1로 초기화 되어야 함
-	int			ceil; // "
+	int			floor;
+	int			ceil;
 }	t_info;
 
 typedef struct s_wall_info
@@ -140,8 +141,6 @@ typedef struct s_line_info
 	t_wall_info	wall;
 	t_info		*info;
 }	t_line_info;
-
-extern const char worldMap[MAP_WIDTH][MAP_HEIGHT];
 
 /**
  * draw.c
@@ -193,7 +192,6 @@ void			push_stack(t_stack *stack, t_node *node);
 t_node			*pop_stack(t_stack *stack);
 void			free_node(t_node *node);
 
-
 /**
  * dfs.c
  */
@@ -239,8 +237,10 @@ int				is_map(char *gnl_buf);
  * parse_utils_3.c
  */
 
-void			get_cardinal_texture(t_info *info, char *gnl_buf, int *task_cnt_adr);
-void			get_floor_ceiling_color(t_info *info, char *gnl_buf, int *task_cnt_adr);
+void			get_cardinal_texture(t_info *info, char *gnl_buf,
+					int *task_cnt_adr);
+void			get_floor_ceiling_color(t_info *info, char *gnl_buf,
+					int *task_cnt_adr);
 void			get_info_until_map(int map_fd, t_info *info);
 
 /**
@@ -254,5 +254,6 @@ void			get_map(int map_fd, t_info *info);
  */
 
 void			examine_map(t_info *info);
+void			check_map_format(char *map_name);
 
 #endif

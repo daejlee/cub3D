@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/10 18:29:31 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 14:41:07 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ void	get_map_slots(t_info *info, char *gnl_buf, int map_fd)
 	i = 0;
 	while (i < info->height)
 	{
-		info->map[i++] = (char *)malloc(sizeof(char) * info->width);
+		info->map[i++] = (char *)malloc(sizeof(char) * (info->width + 1));
 		if (!info->map[i - 1])
 			err(MALLOC_FAIL);
+		ft_memset(info->map[i - 1], 0, sizeof(char) * (info->width + 1));
 	}
 }
 

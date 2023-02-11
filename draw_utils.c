@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:14:53 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 21:20:02 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:42:48 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	get_texture_y(t_line_info *line, int side)
 	return (texture_y);
 }
 
-enum wall_dir	get_wall_dir(t_line_info *line, int side)
+enum e_wall_dir	get_wall_dir(t_line_info *line, int side)
 {
 	if (side == 0)
 	{

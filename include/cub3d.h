@@ -6,7 +6,7 @@
 /*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/11 15:40:56 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:42:09 by daejlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ typedef struct s_wall_info
 	int				start;
 	int				end;
 	double			tex_step;
-	enum wall_dir	dir;
+	enum e_wall_dir	dir;
 	t_ivector		tex;
 }	t_wall_info;
 
@@ -156,7 +156,7 @@ int				draw_wall(t_line_info *line, int side);
  */
 
 int				get_texture_y(t_line_info *line, int side);
-enum wall_dir	get_wall_dir(t_line_info *line, int side);
+enum e_wall_dir	get_wall_dir(t_line_info *line, int side);
 int				get_wall_start(t_line_info *line);
 int				get_wall_end(t_line_info *line);
 

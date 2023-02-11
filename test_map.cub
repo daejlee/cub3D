@@ -1,7 +1,7 @@
-NO ./source/new1.xpm
-SO ./source/new2.xpm
-WE ./source/new3.xpm
-EA ./source/new4.xpm
+NO ./source/no_orange.xpm
+SO ./source/so_yellow.xpm
+WE ./source/we_purple.xpm
+EA ./source/ea_blue.xpm
 
 F 75,93,48
 C 140,172,249

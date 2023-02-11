@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:58:36 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/11 15:36:10 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:56:30 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
-#include "get_next_line.h"
-#include <fcntl.h>
 
 void	free_arr(char **arr)
 {
 	int	i;
 
 	i = 0;
+	if (!arr)
+		return ;
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);

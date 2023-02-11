@@ -6,14 +6,11 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 15:59:53 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/11 14:41:07 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:56:32 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
-#include "get_next_line.h"
-#include <fcntl.h>
 
 char	*remove_tailing_nl(char *gnl_buf)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/10 18:48:33 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 14:05:11 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ int	main(int argc, char **argv)
 	t_info	*info;
 
 	if (argc != 2)
-	{
-		write(2, "too many/less arg.", 19);
-		return (1);
-	}
+		err(INVALID_ARGUMENT);
 	info = init_info();
 	info->mlx.ptr = mlx_init();
 	info->mlx.win_ptr = mlx_new_window(info->mlx.ptr, \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dfs.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:49:52 by daejlee           #+#    #+#             */
-/*   Updated: 2023/02/10 18:58:41 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:08:30 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,7 @@ void	dfs(t_info *info, int x, int y)
 		dfs_check_1(info, stack, node);
 		dfs_check_2(info, stack, node);
 		dfs_check_3(info, stack, node);
+		free_node(node);
 	}
+	free(stack);
 }

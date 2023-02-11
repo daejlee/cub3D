@@ -6,16 +6,22 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 17:06:27 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/11 14:35:09 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:16:37 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+void	leaks()
+{
+	system("leaks cub3D");
+}
+
 int	main(int argc, char **argv)
 {
 	t_info	*info;
 
+	atexit(leaks);
 	if (argc != 2)
 		err(INVALID_ARGUMENT);
 	info = init_info();

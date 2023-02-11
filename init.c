@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daejlee <daejlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:44:39 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/10 18:48:16 by daejlee          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:14:38 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,11 @@ t_info	*init_info(void)
 	info->width = 0;
 	info->height = 0;
 	return (info);
+}
+
+void	free_line_info(t_line_info *info)
+{
+	if (!info)
+		err(UNEXPECTED);
+	free(info);
 }

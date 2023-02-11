@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 19:28:13 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/11 14:04:15 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:07:45 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,12 @@ t_node	*pop_stack(t_stack *stack)
 	stack->top = stack->top->prev;
 	stack->size--;
 	return (node);
+}
+
+void	free_node(t_node *node)
+{
+	if (!node)
+		err(UNEXPECTED);
+	node->prev = NULL;
+	free(node);
 }

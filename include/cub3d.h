@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:47:26 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/11 13:52:24 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:15:10 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ unsigned int	get_pixel(t_img image, int x, int y);
 
 t_line_info		*set_line_info(t_info *info, int x_pixel);
 t_info			*init_info(void);
+void			free_line_info(t_line_info *info);
 
 /**
  * stack.c
@@ -190,6 +191,8 @@ t_stack			*init_stack(void);
 t_node			*init_node(int x, int y);
 void			push_stack(t_stack *stack, t_node *node);
 t_node			*pop_stack(t_stack *stack);
+void			free_node(t_node *node);
+
 
 /**
  * dfs.c

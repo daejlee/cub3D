@@ -6,7 +6,7 @@
 /*   By: hkong <hkong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 16:16:14 by hkong             #+#    #+#             */
-/*   Updated: 2023/02/08 21:22:08 by hkong            ###   ########.fr       */
+/*   Updated: 2023/02/11 15:15:38 by hkong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	draw_map(t_info *info)
 		line = set_line_info(info, y_pixel);
 		side = dda_algorithm(line);
 		draw_line(side, line);
+		free_line_info(line);
 	}
 	mlx_put_image_to_window(info->mlx.ptr, info->mlx.win_ptr, \
 														info->screen.ptr, 0, 0);
